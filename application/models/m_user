@@ -1,0 +1,25 @@
+<?php
+class M_user extends CI_Model{
+	public function __construct()
+	{
+		parent::__construct();
+		//Do your magic here
+	}
+
+	//menampilkan semua karyawan
+	public function getKaryawan($limit,$offset,$level=''){
+		if(!empty($level)){
+			$this->db->where('level',$level);//show karyawan by level (admin/karyawan)
+		}
+		$this->db->limit($limit,$offset);
+		$query = $this->db->get('user');
+		return $query->result_array();
+	}
+	//total karyawan
+	public function countGetKaryawan($level=''){
+		if(!empty($level)){
+			$this->db->where('level',$level);//show karyawan by level (admin/karyawan)
+		}
+		return $this->db->count_all_results('user');
+	}
+}
