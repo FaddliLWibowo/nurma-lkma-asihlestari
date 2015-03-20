@@ -20,33 +20,62 @@ class Dashboard extends base {
 	}
 	//laporan anggota
 	public function laporananggota(){
-		//start pagination
-		$config=array(
-			'per_page'=>20,//tampilan perhalamnnya
-			'uri_segment'=>3,
-			'num_link'=>5,
-			'use_page_number'=>TRUE,
-			'total_rows'=>$this->m_anggota->countGetAnggota(''),
-			'base_url'=>site_url('dashboard/laporananggota'),
-		);
-		$this->load->library('pagination');
-		$this->pagination->initialize($config);
-		$uri = $this->uri->segment(3);
-		if(!$uri) {
-			$uri = 0;
+		if(!empty($_POST) || !empty($_GET['act'])){//do action
+			switch($_GET['act']){
+				case 'add'://process add data
+					//get input data anggota
+                    $data = array(
+                        'no_identitas'=>$_POST['inpunomorid'],
+                        'nama'=>$_POST['inputnama'],
+                        'alamat'=>$_POST['inputalamat'],
+                        'jenis_kelamin'=>$_POST['inputkelamin'],
+                        'tempat_lahir'=>$_POST['inputtempatlahir'],//get data tempat lahir
+                        'tanggal_lahir'=>$_POST['inputtanggallahir'],//modifikasi tnggal berdasarkan database
+                        'telepon'=>$_POST['inputtelp'],
+                    );
+                    print_r($data);
+                    //process insert to database
+                    $this->db->insert('anggota',$data);//insert into
+                    redirect(site_url('dashboard/laporananggota'));//kembali ke halaman laporan anggota
+					break;
+				case 'edit'://process edit data
+					break;
+				case 'delete'://process delete data
+                    $id=$_GET['id'];
+                    $this->db->where('no_anggota',$id);//jika nomor id adalah id yang di pilih
+                    $this->db->delete('anggota');
+                    redirect($this->agent->referrer());//kemabli kehalaman sebbelumnya
+					break;
+			}
+		}else{//just showing
+			//start pagination
+			$config=array(
+				'per_page'=>20,//tampilan perhalamnnya
+				'uri_segment'=>3,
+				'num_link'=>5,
+				'use_page_number'=>TRUE,
+				'total_rows'=>$this->m_anggota->countGetAnggota(''),
+				'base_url'=>site_url('dashboard/laporananggota'),
+			);
+			$this->load->library('pagination');
+			$this->pagination->initialize($config);
+			$uri = $this->uri->segment(3);
+			if(!$uri) {
+				$uri = 0;
+			}
+			$data = array(
+				'title'=>'Laporan Anggota',
+				'script'=>'$("#anggota").addClass("active");',
+				'view'=>$this->m_anggota->getAnggota($config['per_page'],$uri,''),
+			);
+			if($config['total_rows'] < 15) {
+				$data['page'] = 1;
+			} else {
+				$data['page'] = $this->pagination->create_links();
+			}
+			//end of pagination
+			$this->baseView('laporananggota',$data);
 		}
-		$data = array(
-			'title'=>'Laporan Anggota',
-			'script'=>'$("#anggota").addClass("active");',
-			'view'=>$this->m_anggota->getAnggota($config['per_page'],$uri,''),
-		);
-		if($config['total_rows'] < 15) {
-			$data['page'] = 1;
-		} else {
-			$data['page'] = $this->pagination->create_links();
-		}
-		//end of pagination
-		$this->baseView('laporananggota',$data);
 	}
 	//setor
 	public function setor(){
@@ -131,7 +160,7 @@ class Dashboard extends base {
 					);
 					$this->db->update('user',$data);//update db
 					redirect(site_url('dashboard/setting'));
-					//end of set rules
+				//end of set rules
 				case 'add':
 					$data = array(
 						'nama_pegawai'=>$_POST['inputnama'],

@@ -1,4 +1,4 @@
-   <!-- JNT0000OOU*** -->
+<!-- JNT0000OOU*** -->
     <div id="wrapper">
      <!-- top navbar -->
      <?php $this->load->view('base/navbar');?>
@@ -52,7 +52,7 @@
             <td>
               <a href="#" class="btn btn-default btn-xs">edit</a> 
               <a href="#" class="btn btn-default btn-xs">detail</a> 
-              <a href="#" class="btn btn-danger btn-xs">hapus</a>
+              <a href="<?php echo site_url('dashboard/laporananggota?act=delete&id='.$v['no_anggota'])?>" class="btn btn-danger btn-xs">hapus</a>
             </td>
           </tr>
         <?php endforeach; ?>
@@ -69,7 +69,7 @@
 <div class="modal fade" id="tambahanggota" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
-      <form class="form-horizontal" role="form">
+      <form class="form-horizontal" role="form" method="POST" action="<?php echo site_url('dashboard/laporananggota?act=add')?>">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
           <h4 class="modal-title">Tambah Anggota</h4>
@@ -79,46 +79,46 @@
           <div class="form-group">
             <label for="inputEmail1" class="col-lg-2 control-label">No  Identitas</label>
             <div class="col-lg-10">
-              <input type="text" class="form-control" id="inputEmail1" placeholder="Masukan Nomor Identitas" required>
+              <input name="inpunomorid" type="text" class="form-control" id="inputEmail1" placeholder="Masukan Nomor Identitas" required>
             </div>
           </div>        
           <div class="form-group">
           <label for="inputEmail1" class="col-lg-2 control-label">Nama</label>
             <div class="col-lg-10">
-              <input type="text" class="form-control" id="inputEmail1" placeholder="Masukan Nama Lengkap" required>
+              <input name="inputnama" type="text" class="form-control" id="inputEmail1" placeholder="Masukan Nama Lengkap" required>
             </div>
           </div>
           <div class="form-group">
             <label for="inputEmail1" class="col-lg-2 control-label">Alamat</label>
             <div class="col-lg-10">
-              <textarea class="form-control" placeholder="Masukan alamat lengkap" required></textarea>
+              <textarea name="inputalamat" class="form-control" placeholder="Masukan alamat lengkap" required></textarea>
             </div>
           </div>        
           <div class="form-group">
             <label for="inputEmail1" class="col-lg-2 control-label">Jenis Kelamin</label>
             <div class="col-lg-10">
-              <select class="form-control" required>
-                <option value="laki">Laki-laki</option>
-                <option value="laki">Perempuan</option>
+              <select name="inputkelamin" class="form-control" required>
+                <option value="pria">pria</option>
+                <option value="wanita">wanita</option>
               </select>
             </div>
           </div>        
           <div class="form-group">
             <label for="inputEmail1" class="col-lg-2 control-label">Tempat Lahir</label>
             <div class="col-lg-10">
-              <input type="text" class="form-control" id="inputEmail1" placeholder="Masukan kota tempat lahir" required>
+              <input name="inputtempatlahir" type="text" class="form-control" id="inputEmail1" placeholder="Masukan kota tempat lahir" required>
             </div>
           </div>        
           <div class="form-group">
             <label for="inputEmail1" class="col-lg-2 control-label">Tanggal Lahir</label>
             <div class="col-lg-10">
-              <input type="date" class="form-control" id="inputEmail1" placeholder="Masukan tanggal lahir" required>
+              <input name="inputtanggallahir" type="text" class="form-control" id="adddate" placeholder="Masukan tanggal lahir" required>
             </div>
           </div>        
           <div class="form-group">
             <label for="inputEmail1" class="col-lg-2 control-label">No Telp</label>
             <div class="col-lg-10">
-              <input type="tel" class="form-control" id="inputEmail1" placeholder="Masukan nomot telp/mobile yang mudah ">
+              <input name="inputtelp" type="text" class="form-control" id="inputEmail1" placeholder="Masukan nomot telp/mobile yang mudah ">
             </div>
           </div>                 
           <!-- end form -->

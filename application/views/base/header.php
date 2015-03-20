@@ -24,6 +24,8 @@
     <!-- Morris Charts CSS -->
     <link href="<?php echo base_url()?>assets/css/plugins/morris.css" rel="stylesheet">
 
+    <link href="<?php echo base_url()?>assets/libraries/jquery-ui.min.css" rel="stylesheet">
+
     <!-- Custom Fonts -->
     <link href="<?php echo base_url()?>assets/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
     <style type="text/css">
@@ -32,6 +34,7 @@
         color:#fff;
     }
     </style>
+
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
