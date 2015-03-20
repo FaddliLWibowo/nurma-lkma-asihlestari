@@ -1,5 +1,4 @@
 <?php
-
 class M_anggota extends CI_Model{
 	public function __construct()
 	{

@@ -5,7 +5,17 @@ class M_user extends CI_Model{
 		parent::__construct();
 		//Do your magic here
 	}
-
+	//cek login
+	public function login($username,$password){
+		$this->db->where('username',$username);
+		$this->db->where('password',$password);
+		$query = $this->db->get('user');
+		if($query->num_rows()>0){
+			return $query->row_array();//usernae and password match
+		}else{
+			return false;//username and password not match
+		}
+	}
 	//menampilkan semua karyawan
 	public function getKaryawan($limit,$offset,$level=''){
 		if(!empty($level)){
