@@ -32,4 +32,10 @@ class M_user extends CI_Model{
 		}
 		return $this->db->count_all_results('user');
 	}
+	//get user by user_id
+	public function getUserByid($id){
+		$this->db->where('user_id',$id);
+		$query = $this->db->get('user');
+		return $query->row_array();//get detail user
+	}
 }
