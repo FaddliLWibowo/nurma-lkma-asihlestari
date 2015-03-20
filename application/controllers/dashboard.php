@@ -39,7 +39,21 @@ class Dashboard extends base {
                     redirect(site_url('dashboard/laporananggota'));//kembali ke halaman laporan anggota
 					break;
 				case 'edit'://process edit data
-					break;
+					$id = $_GET['id'];
+                    $this->db->where('no_anggota',$id);
+                    $data = array(
+                        'no_identitas'=>$_POST['inpunomorid'],
+                        'nama'=>$_POST['inputnama'],
+                        'alamat'=>$_POST['inputalamat'],
+                        'jenis_kelamin'=>$_POST['inputkelamin'],
+                        'tempat_lahir'=>$_POST['inputtempatlahir'],//get data tempat lahir
+                        'tanggal_lahir'=>$_POST['inputtanggallahir'],//modifikasi tnggal berdasarkan database
+                        'telepon'=>$_POST['inputtelp'],
+                    );
+                    $this->db->where('no_anggota',$id);
+                    $this->db->update('anggota',$data);
+                    redirect($this->agent->referrer());
+                    break;
 				case 'delete'://process delete data
                     $id=$_GET['id'];
                     $this->db->where('no_anggota',$id);//jika nomor id adalah id yang di pilih
