@@ -102,7 +102,7 @@ class Dashboard extends base {
 			'uri_segment'=>3,
 			'num_link'=>5,
 			'use_page_number'=>TRUE,
-			'total_rows'=>0,
+			'total_rows'=>$this->m_simpanan->countAllsimpanan('setoran'),
 			'base_url'=>site_url('dashboard/setor'),
 		);
 		$this->load->library('pagination');
@@ -114,7 +114,8 @@ class Dashboard extends base {
 		$data = array(
 			'title'=>'Laporan Setor',
 			'script'=>'$("#simpanan").addClass("active");$("#setor").addClass("activesub");$("#simpananshow").addClass("in")',
-		);
+		    'view'=>$this->m_simpanan->allSimpanan($config['per_page'],$uri,'setoran'),//menmpilkan semua setoran
+        );
 		if($config['total_rows'] < 15) {
 			$data['page'] = 1;
 		} else {
@@ -125,12 +126,67 @@ class Dashboard extends base {
 	}
 	//penarikan
 	public function penarikan(){
-		$data = array(
-			'title'=>'Laporan Setor',
-			'script'=>'$("#simpanan").addClass("active");$("#penarikan").addClass("activesub");$("#simpananshow").addClass("in")',
-		);
-		$this->baseView('laporansetor',$data);
+        //start pagination
+        $config=array(
+            'per_page'=>20,//tampilan perhalamnnya
+            'uri_segment'=>3,
+            'num_link'=>5,
+            'use_page_number'=>TRUE,
+            'total_rows'=>$this->m_simpanan->countAllsimpanan('penarikan'),
+            'base_url'=>site_url('dashboard/setor'),
+        );
+        $this->load->library('pagination');
+        $this->pagination->initialize($config);
+        $uri = $this->uri->segment(3);
+        if(!$uri) {
+            $uri = 0;
+        }
+        $data = array(
+            'title'=>'Laporan Setor',
+            'script'=>'$("#simpanan").addClass("active");$("#penarikan").addClass("activesub");$("#simpananshow").addClass("in")',
+            'view'=>$this->m_simpanan->allSimpanan($config['per_page'],$uri,'penarikan'),//menmpilkan semua setoran
+        );
+        if($config['total_rows'] < 15) {
+            $data['page'] = 1;
+        } else {
+            $data['page'] = $this->pagination->create_links();
+        }
+        //end of pagination
+        $this->baseView('laporanpenarikan',$data);
 	}
+    //pencarian simpanan
+    public function searchsimpanan(){
+        if(!empty($_GET['q'])){redirect(site_url('dashboard/searchsimpanan/'.$this->uri->segment(3).'/'.$_GET['q']));}
+        $type = $this->uri->segment(3);
+        $keyword = $this->uri->segment(4);
+        $config=array(
+            'per_page'=>20,//tampilan perhalamnnya
+            'uri_segment'=>5,
+            'num_link'=>5,
+            'use_page_number'=>TRUE,
+            'total_rows'=>$this->m_simpanan->countSearchSimpanan($keyword,$type),
+            'base_url'=>site_url('dashboard/setor'),
+        );
+        $this->load->library('pagination');
+        $this->pagination->initialize($config);
+        $uri = $this->uri->segment(5);
+        if(!$uri) {
+            $uri = 0;
+        }
+        $data = array(
+            'title'=>'Laporan Setor',
+            'script'=>'$("#simpanan").addClass("active");$("#penarikan").addClass("activesub");$("#simpananshow").addClass("in")',
+            'total'=>$config['total_rows'],
+            'view'=>$this->m_simpanan->searchSimpanan($config['per_page'],$uri,$keyword,$type),//menmpilkan semua setoran
+        );
+        if($config['total_rows'] < 15) {
+            $data['page'] = 1;
+        } else {
+            $data['page'] = $this->pagination->create_links();
+        }
+        //end of pagination
+        $this->baseView('pencariansimpanan',$data);
+    }
 	//pinjam
 	public function pinjam(){
 		$data = array(

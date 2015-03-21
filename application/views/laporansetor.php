@@ -8,19 +8,18 @@
 
  		<div class="container-fluid">
  			<ol class="breadcrumb">
- 				<li><a href="#">Home</a></li>
- 				<li><a href="#">Library</a></li>
- 				<li class="active">Data</li>
+ 				<li><a href="<?php echo site_url()?>">Dashboard</a></li>
+ 				<li>Laporan Setoran</li>
  			</ol>
  			<h1>Laporan Setoran</h1>
  			<hr/>
  			<div class="row">
- 				<div class="col-md-4"><a href="#" class="btn btn-primary">Tambah Setoran</a></div>
+ 				<div class="col-md-4"><a href="#tambahsetoran" data-toggle="modal" class="btn btn-primary">Tambah Setoran</a></div>
  				<div class="col-md-8">
- 					<form style="float:right" class="form-inline" role="form">
+ 					<form action="<?php echo site_url('dashboard/searchsimpanan/setoran')?>" style="float:right" class="form-inline" role="form">
  						<div class="form-group">
  							<label class="sr-only" for="exampleInputPassword2">search id setoran</label>
- 							<input style="width:300px" type="text" class="form-control" id="exampleInputPassword2" placeholder="pencarian setorann">
+ 							<input name="q" style="width:300px" type="text" class="form-control" id="exampleInputPassword2" placeholder="pencarian berdasarkan id simpanan">
  						</div>
  						<button type="submit" class="btn btn-default">Cari</button>
  					</form>
@@ -32,22 +31,59 @@
  				<tr>
  					<th>Id simpanan</th>
  					<th>Tanggal</th>  
- 					<th>Nasabah</th>
- 					<th>Debit</th>
- 					<th>Kredit</th>
- 					<th>Admin</th>
+ 					<th>Anggota</th>
+ 					<th>Setoran (Rp)</th>
+ 					<th>Penarikan (Rp)</th>
+                    <th></th>
  				</tr>
+                <?php foreach($view as $v):?>
  				<tr>
- 					<td>233-34234</td>
- 					<td>13/01/2015 05:56:34</td>
- 					<td>pak Arif</td>
- 					<td>Rp45.000.000,-</td>
+ 					<td><?php echo $v['id_simpanan']?></td>
+                    <td><?php echo $v['tglaksi']?></td>
+                    <td><?php echo $v['nama']?></td>
+                    <td><?php echo number_format($v['jumlah'])?>,-</td>
  					<td>-</td>
- 					<td>Yussan</td>
+                    <td><a class="btn btn-xs btn-default" href="<?php echo site_url('cek/cekSimpanan/'.$v['no_anggota'])?>">detail</a></td>
  				</tr>
+                <?php endforeach;?>
  			</table>
  			<br/>
  			<center><?php echo $page; ?></center>
  		</div>
  	</div>
  </div>
+
+ <!-- start modal -->
+ <!-- Modal -->
+ <div class="modal fade" id="tambahsetoran" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+     <div class="modal-dialog">
+         <div class="modal-content">
+             <form class="form-horizontal" role="form" method="POST" action="<?php echo site_url('cek/addAksiSimpanan')?>">
+                 <div class="modal-header">
+                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                     <h4 class="modal-title">Tambah Setoran</h4>
+                 </div>
+                 <div class="modal-body">
+                     <!-- start form -->
+                     <label>Id Simpanan</label>
+                     <input class="form-control" type="text" name="inputidsimpanan" placeholder="masukan id simpanan" required>
+                     <br/>
+                     <label>Jumlah <small>masukan tanpa titik</small></label>
+                     <input class="form-control" type="number" name="inputjumlah" value="0" required>
+                     <br/>
+                     <label>Type</label>
+                     <select name="inputtype" id="" class="form-control">
+                         <option value="setoran">setoran</option>
+                         <option value="penarikan">penarikan</option>
+                     </select>
+                     <!-- end form -->
+                 </div>
+                 <div class="modal-footer">
+                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                     <button type="submit" class="btn btn-primary">Save changes</button>
+                 </div>
+             </form>
+         </div><!-- /.modal-content -->
+     </div><!-- /.modal-dialog -->
+ </div><!-- /.modal -->
+ <!-- end of modal -->

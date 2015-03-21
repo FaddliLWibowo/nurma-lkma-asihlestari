@@ -66,5 +66,53 @@ INNER JOIN simpanan ON simpanan.id_simpanan = aksiSimpanan.id_simpanan WHERE sim
         $query = $this->db->get('aksiSimpanan');
         return $query->num_rows();
     }
+    //menampilkan semua setoran/$penarikan
+    public function allSimpanan($limit,$offset,$type){
+        $sql = "SELECT anggota.no_anggota,anggota.nama AS 'nama', aksiSimpanan.tgl AS 'tglaksi',aksiSimpanan.jumlah AS 'jumlah',aksiSimpanan.id_simpanan
+        FROM aksiSimpanan
+        INNER JOIN simpanan ON simpanan.id_simpanan = aksiSimpanan.id_simpanan
+        INNER JOIN anggota ON simpanan.no_anggota = anggota.no_anggota
+        WHERE aksiSimpanan.status = '$type'
+        LIMIT $offset,$limit
+        ";
+        $query = $this->db->query($sql);
+        return $query->result_array();
+    }
+    //count all setoran
+    public function countAllSimpanan($type){
+        $sql = "SELECT anggota.no_anggota,anggota.nama AS 'nama', aksiSimpanan.tgl AS 'tglaksi',aksiSimpanan.jumlah AS 'jumlah',aksiSimpanan.id_simpanan
+        FROM aksiSimpanan
+        INNER JOIN simpanan ON simpanan.id_simpanan = aksiSimpanan.id_simpanan
+        INNER JOIN anggota ON simpanan.no_anggota = anggota.no_anggota
+        WHERE aksiSimpanan.status = '$type'
+        ";
+        $query = $this->db->query($sql);
+        return $query->num_rows();
+    }
+    //pencarian simpanan
+    public function searchSimpanan($limit,$offset,$keyword,$type=''){
+        $sql = "SELECT anggota.no_anggota,anggota.nama AS 'nama', aksiSimpanan.tgl AS 'tglaksi',aksiSimpanan.jumlah AS 'jumlah',aksiSimpanan.id_simpanan
+        ,aksiSimpanan.status AS 'status' FROM aksiSimpanan
+        INNER JOIN simpanan ON simpanan.id_simpanan = aksiSimpanan.id_simpanan
+        INNER JOIN anggota ON simpanan.no_anggota = anggota.no_anggota
+        WHERE aksiSimpanan.status = '$type' AND aksiSimpanan.id_simpanan = '$keyword'
+        LIMIT $offset,$limit";
+        $query = $this->db->query($sql);
+        if($query->num_rows()>0){
+            return $query->result_array();
+        }else{
+            return array();
+        }
+    }
+    //total hasil simpanan
+    public function countSearchSimpanan($keyword,$type=''){
+        $sql = "SELECT anggota.no_anggota,anggota.nama AS 'nama', aksiSimpanan.tgl AS 'tglaksi',aksiSimpanan.jumlah AS 'jumlah',aksiSimpanan.id_simpanan
+        FROM aksiSimpanan
+        INNER JOIN simpanan ON simpanan.id_simpanan = aksiSimpanan.id_simpanan
+        INNER JOIN anggota ON simpanan.no_anggota = anggota.no_anggota
+        WHERE aksiSimpanan.status = '$type'AND aksiSimpanan.id_simpanan = '$keyword'";
+        $query = $this->db->query($sql);
+        return $query->num_rows();//total hasil pencarian
+    }
 
 }

@@ -9,20 +9,21 @@
         <div class="container-fluid">
             <ol class="breadcrumb">
                 <li><a href="<?php echo site_url()?>">Dashboard</a></li>
-                <li>Laporan Penarikan</li>
+                <li>Pencarian Simpanan</li>
             </ol>
-            <h1>Laporan Penarikan</h1>
+            <h1>Laporan Pencarian Simpanan</h1>
+            <p>keyword "<?php echo $this->uri->segment(4) ?>", total hasil : <?php echo $total;?></p>
             <hr/>
             <div class="row">
-                <div class="col-md-4"><a href="#tambahsetoran" data-toggle="modal" class="btn btn-primary">Tambah Penarikan</a></div>
+                <div class="col-md-4"><a href="#tambahsetoran" data-toggle="modal" class="btn btn-primary">Tambah Penarikan/Setoran</a></div>
                 <div class="col-md-8">
-                    <form action="<?php echo site_url('dashboard/searchsimpanan/penarikan')?>" style="float:right" class="form-inline" role="form">
-                        <div class="form-group">
-                            <label class="sr-only" for="exampleInputPassword2">search id setoran</label>
-                            <input name="q" style="width:300px" type="text" class="form-control" id="exampleInputPassword2" placeholder="pencarian berdasar id simpanan">
-                        </div>
-                        <button type="submit" class="btn btn-default">Cari</button>
-                    </form>
+<!--                    <form  style="float:right" class="form-inline" role="form">-->
+<!--                        <div class="form-group">-->
+<!--                            <label class="sr-only" for="exampleInputPassword2">search id setoran</label>-->
+<!--                            <input style="width:300px" type="text" class="form-control" id="exampleInputPassword2" value="--><?php //echo $this->uri->segment(4)?><!--" placeholder="pencarian berdasar id simpanan">-->
+<!--                        </div>-->
+<!--                        <button type="submit" class="btn btn-default">Cari</button>-->
+<!--                    </form>-->
                 </div>
             </div>
             <!-- /.container-fluid -->
@@ -41,8 +42,24 @@
                         <td><?php echo $v['id_simpanan']?></td>
                         <td><?php echo $v['tglaksi']?></td>
                         <td><?php echo $v['nama']?></td>
-                        <td>-</td>
-                        <td><?php echo number_format($v['jumlah'])?>,-</td>
+                        <td>
+                            <?php
+                            if($v['status']=='setoran'){
+                                echo number_format($v['jumlah']);
+                            }else if($v['status']=='penarikan'){
+                                echo '-';
+                            }
+                            ?>
+                        </td>
+                        <td>
+                            <?php
+                            if($v['status']=='penarikan'){
+                                echo number_format($v['jumlah']);
+                            }else if($v['status']=='setoran'){
+                                echo '-';
+                            }
+                            ?>
+                        </td>
                         <td><a class="btn btn-xs btn-default" href="<?php echo site_url('cek/cekSimpanan/'.$v['no_anggota'])?>">detail</a></td>
                     </tr>
                 <?php endforeach;?>
