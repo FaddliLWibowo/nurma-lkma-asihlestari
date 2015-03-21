@@ -9,12 +9,15 @@
         <div class="container-fluid">
 
             <ol class="breadcrumb">
-                <li><a href="#">Home</a></li>
-                <li><a href="#">Library</a></li>
-                <li class="active">Data</li>
+                <li><a href="<?php echo site_url('dashboard')?>">Dashboard</a></li>
+                <li><a href="<?php echo site_url('dashboard/laporananggota')?>">Laporan Anggota</a></li>
             </ol>
             <h1>Laporan Anggota</h1>
             <hr/>
+            <ul class="nav nav-tabs">
+                <li class="active"><a href="#home" data-toggle="tab">Semua Anggota</a></li>
+            </ul>
+            <br/>
             <div class="row">
                 <!--edit peserta-->
                 <?php if(!empty($_GET['view']) && $_GET['view']=='edit'):
@@ -118,7 +121,7 @@
                         <td><?php echo $v['telepon'];?></td>
                         <td>
                             <a href="<?php echo site_url('dashboard/laporananggota?view=edit&id='.$v['no_anggota'])?>" class="btn btn-default btn-xs">edit</a>
-                            <a href="#" class="btn btn-default btn-xs">detail</a>
+                            <a href="<?php echo site_url('cek/cekSimpanan/'.$v['no_anggota'])?>" class="btn btn-default btn-xs">detail</a>
                             <a href="<?php echo site_url('dashboard/laporananggota?act=delete&id='.$v['no_anggota'])?>" class="btn btn-danger btn-xs">hapus</a>
                         </td>
                     </tr>

@@ -38,4 +38,5 @@ class M_anggota extends CI_Model{
 		$query = $this->db->get('anggota');
 		return $query->row_array();
 	}
+
 }

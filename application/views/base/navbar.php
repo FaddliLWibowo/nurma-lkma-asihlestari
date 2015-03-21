@@ -115,7 +115,7 @@
             <div class="collapse navbar-collapse navbar-ex1-collapse">
                 <ul class="nav navbar-nav side-nav">
                     <li id="dashboard">
-                        <a href="index.html"><i class="fa fa-fw fa-dashboard"></i> Dashboard</a>
+                        <a href="<?php echo site_url();?>"><i class="fa fa-fw fa-dashboard"></i> Dashboard</a>
                     </li>
                     <li id="anggota">
                         <a href="<?php echo site_url('dashboard/laporananggota');?>"><i class="fa fa-fw fa-user"></i> Laporan Anggota</a>

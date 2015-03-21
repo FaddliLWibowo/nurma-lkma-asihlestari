@@ -15,7 +15,10 @@ class Dashboard extends base {
 	 */
 	public function index()//do login for pegawai
 	{
-		$data = array('title'=>'Dashboard');
+		$data = array(
+            'title'=>'Dashboard',
+            'script'=>'$("#dashboard").addClass("active");',
+        );
 		$this->baseView('dashboard',$data);
 	}
 	//laporan anggota
