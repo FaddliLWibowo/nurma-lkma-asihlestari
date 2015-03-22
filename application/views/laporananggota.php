@@ -88,10 +88,10 @@
                 <!--end of edit peserta-->
                 <div class="col-md-4"><a data-toggle="modal" href="#tambahanggota" class="btn btn-primary">Tambah Anggota</a></div>
                 <div class="col-md-8">
-                    <form style="float:right" class="form-inline" role="form">
+                    <form style="float:right" class="form-inline" role="form" action="<?php echo site_url('dashboard/laporananggota')?>" method="get">
                         <div class="form-group">
                             <label class="sr-only" for="exampleInputPassword2">Password</label>
-                            <input style="width:300px" type="search" class="form-control" id="exampleInputPassword2" placeholder="pencarian">
+                            <input name="q" style="width:300px" type="search" class="form-control" id="exampleInputPassword2" placeholder="pencarian">
                         </div>
                         <button type="submit" class="btn btn-default">Cari</button>
                     </form>
