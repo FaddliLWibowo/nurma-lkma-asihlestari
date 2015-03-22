@@ -13,7 +13,7 @@
                 <li><a href="<?php echo site_url('dashboard/laporananggota')?>">Laporan Anggota</a></li>
                 <li>Detail Anggota</li>
             </ol>
-            <h1>Cek Simpanan <?php echo $anggota['nama'];?></h1>
+            <h1>Cek Pinjaman <?php echo $anggota['nama'];?></h1>
             <?php $this->load->view('anggota/detailAnggota',$data['anggota']=$anggota)?>
             <hr/>
             <ul class="nav nav-tabs">
@@ -21,48 +21,31 @@
                 <li id="cekpinjaman"><a href="<?php echo site_url('cek/cekpinjaman/'.$anggota['no_anggota'])?>">Pinjaman</a></li>
             </ul>
             <br/>
-            <div class="row">
-                <div class="col-md-12">
-                    <!--detail simpanan-->
-                    <h4>Detail Simpanan</h4>
-                    <!--end of detail simpanan-->
-                    <table class="table table-striped">
-                        <tr>
-                            <td><strong>No Simpanan</strong></td>
-                            <td><?php echo $simpanan['id_simpanan'];?></td>
-                        </tr>
-                        <tr>
-                            <td><strong>Tgl Buat Simpanan</strong></td>
-                            <td><?php echo $simpanan['tgl_simpan'];?></td>
-                        </tr>
-                        <tr>
-                            <td><strong>Total Saldo</strong></td>
-                            <td>Rp<?php echo number_format($saldo);?>,-</td>
-                        </tr>
-                    </table>
-                </div>
-            </div>
             <!-- /.container-fluid -->
             <br/>
-            <h4>Mutasi Simpanan</h4>
-            <a href="#tambahsetoran" data-toggle="modal" class="btn btn-primary">+ Setoran</a> <a href="#tambahpenarikan" data-toggle="modal" class="btn btn-primary">+ Penarikan</a>
+            <h4>Daftar Pinjaman</h4>
+            <a href="#tambahsetoran" data-toggle="modal" class="btn btn-primary">+ Pinjaman</a>
             <br/><br/>
             <table class="table table-striped">
                 <tr>
-                    <th>tanggal</th>
-                    <th>jenis</th>
-                    <th>Total</th>
+                    <th>Id Pinjam</th>
+                    <th>Tanggal Pinjam</th>
+                    <th>Jatuh Tempo</th>
+                    <th>Besar Pinjaman (Rp)</th>
+                    <th>Status</th>
                     <th></th>
                 </tr>
                 <?php
-                foreach($mutasi as $m):
+                   foreach($pinjaman as $p):
                     echo '<tr>';
-                    echo '<td>'.$m['tgl'].'</td>';
-                    echo '<td>'.$m['status'].'</td>';
-                    echo '<td>Rp'.number_format($m['jumlah']).',-</td>';
-                    echo '<td><a onclick="return confirm(\'yakinkan dulu\')" class="btn btn-danger btn-xs" href="'.site_url('cek/delAksiSimpanan/'.$m['id_aksi']).'">hapus</a></td>';
+                    echo '<td>'.$p['id_pinjaman'].'</td>';
+                    echo '<td>'.$p['tgl_pinjam'].'</td>';
+                    echo '<td>'.$p['jatuh_tempo'].'</td>';
+                    echo '<td>Rp'.number_format($p['besar_pinjaman']).',-</td>';
+                    echo '<td>'.$p['status'].'</td>';
+                    echo '<td> <a class="btn btn-default btn-xs" href="'.site_url('cek/detailpinjaman/'.$p['id_pinjaman']).'">detail</a> <a onclick="return confirm(\'yakinkan dulu\')" class="btn btn-danger btn-xs" href="'.site_url('cek/hapuspinjaman/'.$p['id_pinjaman']).'">hapus</a></td>';
                     echo '</tr>';
-                endforeach;
+                    endforeach;
                 ?>
             </table>
             <br/>
