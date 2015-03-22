@@ -25,6 +25,7 @@
                 <div class="col-md-12">
                     <!--detail simpanan-->
                     <h4>Detail Simpanan</h4>
+                    <?php if(!empty($simpanan)){?>
                     <!--end of detail simpanan-->
                     <table class="table table-striped">
                         <tr>
@@ -40,6 +41,8 @@
                             <td>Rp<?php echo number_format($saldo);?>,-</td>
                         </tr>
                     </table>
+                    <?php } else {?>
+                    <?php echo 'belum punya simpanan';}?>
                 </div>
             </div>
             <!-- /.container-fluid -->
