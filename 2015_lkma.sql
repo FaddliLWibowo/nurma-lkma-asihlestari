@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Mar 21, 2015 at 04:49 
+-- Generation Time: Mar 22, 2015 at 06:00 
 -- Server version: 5.6.12
 -- PHP Version: 5.5.3
 
@@ -86,21 +86,13 @@ INSERT INTO `anggota` (`no_anggota`, `no_identitas`, `nama`, `alamat`, `jenis_ke
 CREATE TABLE IF NOT EXISTS `angsuran` (
   `id_angsuran` int(15) NOT NULL AUTO_INCREMENT,
   `id_pinjaman` int(15) NOT NULL,
-  `no_anggota` int(12) NOT NULL,
   `tgl_angsur` date NOT NULL,
-  `angsuran_ke` int(10) NOT NULL,
   `angsuran_pokok` int(15) NOT NULL,
   `denda` int(15) NOT NULL,
   `total_angsur` int(15) NOT NULL,
-  PRIMARY KEY (`id_angsuran`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
-
---
--- Dumping data for table `angsuran`
---
-
-INSERT INTO `angsuran` (`id_angsuran`, `id_pinjaman`, `no_anggota`, `tgl_angsur`, `angsuran_ke`, `angsuran_pokok`, `denda`, `total_angsur`) VALUES
-(1, 0, 909090, '1290-12-12', 8, 900000, 10000, 2900000);
+  PRIMARY KEY (`id_angsuran`),
+  KEY `id_pinjaman` (`id_pinjaman`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -115,7 +107,8 @@ CREATE TABLE IF NOT EXISTS `jaminan` (
   `nama_pemilik` varchar(50) NOT NULL,
   `alamat_pemilik` varchar(50) NOT NULL,
   `keterangan` varchar(30) NOT NULL,
-  PRIMARY KEY (`id_jaminan`)
+  PRIMARY KEY (`id_jaminan`),
+  KEY `id_pinjaman` (`id_pinjaman`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
@@ -127,22 +120,23 @@ CREATE TABLE IF NOT EXISTS `jaminan` (
 CREATE TABLE IF NOT EXISTS `pinjaman` (
   `id_pinjaman` int(15) NOT NULL AUTO_INCREMENT,
   `no_anggota` int(12) NOT NULL,
-  `tgl_pinjam` date NOT NULL,
+  `tgl_pinjam` datetime NOT NULL,
   `besar_pinjaman` int(15) NOT NULL,
-  `jatuh_tempo` int(15) NOT NULL,
-  `besar_angsuran` int(15) NOT NULL,
-  PRIMARY KEY (`id_pinjaman`)
+  `jatuh_tempo` datetime NOT NULL,
+  `status` enum('pinjam','lunas','telat') NOT NULL,
+  PRIMARY KEY (`id_pinjaman`),
+  KEY `no_anggota` (`no_anggota`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=10 ;
 
 --
 -- Dumping data for table `pinjaman`
 --
 
-INSERT INTO `pinjaman` (`id_pinjaman`, `no_anggota`, `tgl_pinjam`, `besar_pinjaman`, `jatuh_tempo`, `besar_angsuran`) VALUES
-(6, 5, '2014-12-17', 1000000, 0, 95334),
-(7, 17, '2014-12-17', 900000, 0, 160800),
-(8, 7, '2014-12-17', 2000000, 0, 357334),
-(9, 10, '2014-12-18', 1000000, 0, 95334);
+INSERT INTO `pinjaman` (`id_pinjaman`, `no_anggota`, `tgl_pinjam`, `besar_pinjaman`, `jatuh_tempo`, `status`) VALUES
+(6, 6, '2014-12-17 00:00:00', 1000000, '2015-08-01 00:00:00', 'pinjam'),
+(7, 17, '2014-12-17 00:00:00', 900000, '0000-00-00 00:00:00', 'pinjam'),
+(8, 7, '2014-12-17 00:00:00', 2000000, '0000-00-00 00:00:00', 'pinjam'),
+(9, 10, '2014-12-18 00:00:00', 1000000, '0000-00-00 00:00:00', 'pinjam');
 
 -- --------------------------------------------------------
 
@@ -209,6 +203,18 @@ INSERT INTO `user` (`user_id`, `nama_pegawai`, `alamat_pegawai`, `jk_pegawai`, `
 --
 ALTER TABLE `aksiSimpanan`
   ADD CONSTRAINT `aksiSimpanan_ibfk_1` FOREIGN KEY (`id_simpanan`) REFERENCES `simpanan` (`id_simpanan`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `angsuran`
+--
+ALTER TABLE `angsuran`
+  ADD CONSTRAINT `angsuran_ibfk_1` FOREIGN KEY (`id_pinjaman`) REFERENCES `pinjaman` (`id_pinjaman`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `jaminan`
+--
+ALTER TABLE `jaminan`
+  ADD CONSTRAINT `jaminan_ibfk_1` FOREIGN KEY (`id_pinjaman`) REFERENCES `pinjaman` (`id_pinjaman`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
