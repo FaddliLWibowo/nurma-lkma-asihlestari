@@ -91,7 +91,7 @@
                     <form style="float:right" class="form-inline" role="form" action="" method="get">
                         <div class="form-group">
                             <label class="sr-only" for="exampleInputPassword2">Password</label>
-                            <input name="q" style="width:300px" type="search" class="form-control" id="exampleInputPassword2" placeholder="pencarian nama / no anggota">
+                            <input name="q" style="width:300px" type="search" class="form-control" id="exampleInputPassword2" placeholder="pencarian nama anggota">
                         </div>
                         <button type="submit" class="btn btn-default">Cari</button>
                     </form>
