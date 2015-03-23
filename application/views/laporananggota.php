@@ -26,7 +26,7 @@
                     ?>
                     <form class="form-horizontal" role="form" method="POST" action="<?php echo site_url('dashboard/laporananggota?act=edit&id='.$_GET['id'])?>">
                         <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                            <!-- <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button> -->
                             <h4 class="modal-title">Edit Anggota</h4>
                         </div>
                         <div class="modal-body">
@@ -79,7 +79,7 @@
                             <!-- end form -->
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <!-- <button type="button" class="btn btn-default" data-dismiss="modal">Close</button> -->
                             <button type="submit" class="btn btn-primary">Save changes</button>
                         </div>
                     </form>
@@ -88,10 +88,10 @@
                 <!--end of edit peserta-->
                 <div class="col-md-4"><a data-toggle="modal" href="#tambahanggota" class="btn btn-primary">Tambah Anggota</a></div>
                 <div class="col-md-8">
-                    <form style="float:right" class="form-inline" role="form" action="<?php echo site_url('dashboard/laporananggota')?>" method="get">
+                    <form style="float:right" class="form-inline" role="form" action="" method="get">
                         <div class="form-group">
                             <label class="sr-only" for="exampleInputPassword2">Password</label>
-                            <input name="q" style="width:300px" type="search" class="form-control" id="exampleInputPassword2" placeholder="pencarian">
+                            <input name="q" style="width:300px" type="search" class="form-control" id="exampleInputPassword2" placeholder="pencarian nama / no anggota">
                         </div>
                         <button type="submit" class="btn btn-default">Cari</button>
                     </form>
@@ -99,6 +99,7 @@
             </div>
             <!-- /.container-fluid -->
             <br/>
+            <?php if(empty($view)){echo 'data tidak ditemukan';} else {?>
             <table class="table table-striped">
                 <tr>
                     <th>id anggota</th>
@@ -129,6 +130,7 @@
             </table>
             <br/>
             <center><?php echo $page; ?></center>
+            <?php } ?>
         </div>
     </div>
     <!-- /#page-wrapper -->

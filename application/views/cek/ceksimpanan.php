@@ -13,7 +13,7 @@
                 <li><a href="<?php echo site_url('dashboard/laporananggota')?>">Laporan Anggota</a></li>
                 <li>Detail Anggota</li>
             </ol>
-            <h1>Cek Simpanan <?php echo $anggota['nama'];?></h1>
+            <h1>Cek Simpanan <?php echo $anggota['nama'];?> <!-- <a class="btn btn-default" href=""><i class="glyphicon glyphicon-print"></i> Cetak</a> --></h1>
             <?php $this->load->view('anggota/detailAnggota',$data['anggota']=$anggota)?>
             <hr/>
             <ul class="nav nav-tabs">
@@ -42,7 +42,7 @@
                         </tr>
                     </table>
                     <?php } else {?>
-                    <?php echo 'belum punya simpanan';}?>
+                    <?php echo 'belum punya simpanan <a class="btn btn-primary" href="'.site_url('dashboard/buatsimpanan/'.$this->uri->segment(3)).'"> + Buat Simpanan</a>';}?>
                 </div>
             </div>
             <!-- /.container-fluid -->

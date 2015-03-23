@@ -16,7 +16,7 @@
             <div class="row">
                 <div class="col-md-4"><a href="#tambahsetoran" data-toggle="modal" class="btn btn-primary">Tambah Penarikan</a></div>
                 <div class="col-md-8">
-                    <form action="<?php echo site_url('dashboard/searchsimpanan/penarikan')?>" style="float:right" class="form-inline" role="form">
+                    <form action="" style="float:right" class="form-inline" role="form">
                         <div class="form-group">
                             <label class="sr-only" for="exampleInputPassword2">search id setoran</label>
                             <input name="q" style="width:300px" type="text" class="form-control" id="exampleInputPassword2" placeholder="pencarian berdasar id simpanan">

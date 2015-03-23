@@ -11,7 +11,7 @@
             <ol class="breadcrumb">
                 <li><a href="<?php echo site_url('dashboard')?>">Dashboard</a></li>
                 <li><a href="<?php echo site_url('dashboard/laporananggota')?>">Laporan Anggota</a></li>
-                <li>Detail Anggota</li>
+                <li>Pinjaman</li>
             </ol>
             <h1>Cek Pinjaman <?php echo $anggota['nama'];?></h1>
             <?php $this->load->view('anggota/detailAnggota',$data['anggota']=$anggota)?>
@@ -60,59 +60,37 @@
 <div class="modal fade" id="tambahsetoran" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form class="form-horizontal" role="form" method="POST" action="<?php echo site_url('cek/addAksiSimpanan')?>">
+            <form class="form-horizontal" role="form" method="POST" action="<?php echo site_url('cek/addPinjaman/'.$this->uri->segment(3))?>">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title">Tambah Setoran</h4>
+                    <h4 class="modal-title">Tambah Pinjaman</h4>
                 </div>
                 <div class="modal-body">
                     <!-- start form -->
-                    <label>Id Simpanan</label>
-                    <input class="form-control" type="text" name="inputidsimpanan" value="<?php echo $simpanan['id_simpanan'];?>" required>
+                    <h4>Data Pinjaman</h4>
+                    <label>Besar Pinjaman (Rp)<br/> <small>masukan tanpa tanda titik</small></label>
+                    <input class="form-control" name="inputjumlah" type="number" required>
                     <br/>
-                    <label>Jumlah<small>masukan tanpa titik</small></label>
-                    <input class="form-control" type="number" name="inputjumlah" value="0" required>
+                    <label>Jatuh Tempo<br/> <small>default 1 tahun dari tanggal sekarang</small></label>
+                    <?php 
+                    $nextN = mktime(0, 0, 0, date("m"), date("d"), date("Y")+1);//1 tahun berikutnya
+                    $nextyear = date("d-m-Y", $nextN);
+                    ?>
+                    <input class="form-control" id="adddate" name="inputjatuhtempo" type="text"  value="<?php echo $nextyear?>" required>   
+                    <hr/>
+                    <h4>Data Jaminan</h4>
+                    <label>Jenis Jaminan</label>
+                    <input class="form-control" name="inputjaminan_jenis" type="text" required>
                     <br/>
-                    <label>Type</label>
-                    <select name="inputtype" id="" class="form-control">
-                        <option value="setoran">setoran</option>
-                        <option value="penarikan">penarikan</option>
-                    </select>
-                    <!-- end form -->
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Save changes</button>
-                </div>
-            </form>
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
-<!-- end of modal -->
-
-<!-- start modal -->
-<!-- Modal -->
-<div class="modal fade" id="tambahpenarikan" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <form class="form-horizontal" role="form" method="POST" action="<?php echo site_url('cek/addAksiSimpanan')?>">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title">Tambah Penarikan</h4>
-                </div>
-                <div class="modal-body">
-                    <!-- start form -->
-                    <label>Id Simpanan</label>
-                    <input class="form-control" type="text" name="inputidsimpanan" value="<?php echo $simpanan['id_simpanan'];?>" required>
+                    <label>Nama Pemilik Jaminan</label>
+                    <input class="form-control" name="inputjaminan_pemilik" type="text" required>
                     <br/>
-                    <label>Jumlah<small>masukan tanpa titik</small></label>
-                    <input class="form-control" type="number" name="inputjumlah" value="0" required>
+                    <label>Alamat Pemilik Jaminan</label>
+                    <textarea class="form-control" name="inputjaminan_alamat" required></textarea>
                     <br/>
-                    <label>Type</label>
-                    <select name="inputtype" id="" class="form-control">
-                        <option value="penarikan">penarikan</option>
-                        <option value="setoran">setoran</option>
-                    </select>
+                    <label>Keterangan Jaminan</label>
+                    <textarea class="form-control" name="inputjaminan_keterangan" required></textarea>
+                    <br/>
                     <!-- end form -->
                 </div>
                 <div class="modal-footer">

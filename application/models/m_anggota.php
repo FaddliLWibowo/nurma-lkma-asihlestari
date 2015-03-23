@@ -14,22 +14,21 @@ class M_anggota extends CI_Model{
 	//total anggota
 	public function countGetAnggota(){return $this->db->count_all('anggota');}
 	//search anggota
-	public function searchAnggota($keyword){
-		$this->db->like('nama',$keyword);
-		$this->db->or_where('telepon',$keyword);
-		$this->db->or_where('no_anggota',$keyword);
-		$this->db->or_where('no_identitas',$keyword);
+	public function searchAnggota($limit,$offset,$keyword){
+		$this->db->or_like('nama',$keyword);
+		$this->db->or_like('telepon',$keyword);
+		$this->db->or_like('no_anggota',$keyword);
+		$this->db->or_like('no_identitas',$keyword);
 		$this->db->limit($limit,$offset);
 		$query = $this->db->get('anggota');
 		return $query->result_array();
 	}
 	//count search anggota
 	public function countSearchAnggota($keyword){
-		$this->db->like('nama',$keyword);
-		$this->db->or_where('telepon',$keyword);
-		$this->db->or_where('no_anggota',$keyword);
-		$this->db->or_where('no_identitas',$keyword);
-		$this->db->limit($limit,$offset);
+		$this->db->or_like('nama',$keyword);
+		$this->db->or_like('telepon',$keyword);
+		$this->db->or_like('no_anggota',$keyword);
+		$this->db->or_like('no_identitas',$keyword);
 		return $this->db->count_all('anggota');
 	}
 	//detail anggota bersadasarkan nomor anggota

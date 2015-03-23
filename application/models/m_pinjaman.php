@@ -10,18 +10,16 @@ class M_pinjaman extends CI_Model{
     * ALL ABOUT PINJAMAN
     */
     //menampilkan semua data pinjaman
-    public function getPinjaman($limit,$offset,$orderby='',$ordertype=''){
-        if(!empty($orderby)){
-            $this->db->order($orderby,$ordertype);
-        }
+    public function getPinjaman($limit,$offset,$orderby='',$ordertype='',$keyword=''){
+        if(!empty($orderby)){$this->db->order_by($orderby,$ordertype);}
+        if(!empty($keyword)){$this->db->where('pinjaman.id_pinjaman',$keyword);}
+        $this->db->join('anggota','anggota.no_anggota=pinjaman.no_anggota','left');
         $query=$this->db->get('pinjaman');
         return $query->result_array();
     }
     //total data pinjaman
-    public function countGetPinjaman($limit,$offset,$orderby='',$ordertype=''){
-        if(!empty($orderby)){
-            $this->db->order($orderby,$ordertype);
-        }
+    public function countGetPinjaman($keyword=''){
+        if(!empty($keyword)){$this->db->where('pinjaman.id_pinjaman',$keyword);}
         return $this->db->count_all_results('pinjaman');
     }
     //menampilkan semua pinjaman oleh anggota
@@ -56,11 +54,51 @@ class M_pinjaman extends CI_Model{
     /*
     * ALL ABOUT ANGSURAN
     */
-
-//    list angsuran berdasarkan id pinjaman
+    //menampilkan semua angsuran
+    public function getAngsuran($limit,$offset,$keyword=''){
+        if(!empty($keyword)){
+            $this->db->where('angsuran.id_pinjaman',$keyword);
+        }
+        $this->db->order_by('id_angsuran','DESC');
+        $this->db->limit($limit,$offset);
+        $this->db->join('pinjaman','pinjaman.id_pinjaman=angsuran.id_pinjaman');
+        $query = $this->db->get('angsuran');
+        if($query->num_rows()>0){return $query->result_array();}else{return array();}
+    }
+    //menghitung semua angsuran
+    public function countGetAngsuran($keyword=''){
+        if(!empty($keyword)){
+            $this->db->where('angsuran.id_pinjaman',$keyword);
+        }
+        $this->db->order_by('id_angsuran','DESC');
+        $this->db->join('pinjaman','pinjaman.id_pinjaman=angsuran.id_pinjaman');
+        $query = $this->db->get('angsuran');
+        return $query->num_rows();
+    }
+    //total angsuran
+    public function totalAngsuran($idpinjaman){
+        $this->db->where('id_pinjaman',$idpinjaman);
+        $this->db->select_sum('total_angsur');
+        $query = $this->db->get('angsuran');
+        $query = $query->row_array();
+        return $query['total_angsur'];
+    }
+    //list angsuran berdasarkan id pinjaman
     public function listAngsuran($idpinjaman){
         $this->db->where('id_pinjaman',$idpinjaman);
         $query = $this->db->get('angsuran');
         if($query->num_rows()>0){return $query->result_array();}else{return array();}
+    }
+    //tanggal terakhir bayar angsuran
+    public function tanggalTerakhirAngsur($idpinjaman){
+        $this->db->where('id_pinjaman',$idpinjaman);
+        $this->db->order_by('id_angsuran','DESC');
+        $this->db->select('tgl_angsur');
+        $query = $this->db->get('angsuran');
+        if($query->num_rows()>0){
+            return $query->row_array();
+        }else{
+            return array();
+        }
     }
 }

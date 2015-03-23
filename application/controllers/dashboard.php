@@ -67,13 +67,18 @@ class Dashboard extends base {
 		}else{//just showing
 			//start pagination
 			$config=array(
-				'per_page'=>20,//tampilan perhalamnnya
+				'per_page'=>35,//tampilan perhalamnnya
 				'uri_segment'=>3,
 				'num_link'=>5,
 				'use_page_number'=>TRUE,
-				'total_rows'=>$this->m_anggota->countGetAnggota(''),
 				'base_url'=>site_url('dashboard/laporananggota'),
 			);
+			if(!empty($_GET['q'])){//search something
+				$keyword = $_GET['q'];//get keyword
+				$config['total_rows'] = $this->m_anggota->countSearchAnggota($keyword);
+			}else{//not searching
+				$config['total_rows'] = $this->m_anggota->countGetAnggota('');
+			}
 			$this->load->library('pagination');
 			$this->pagination->initialize($config);
 			$uri = $this->uri->segment(3);
@@ -83,8 +88,15 @@ class Dashboard extends base {
 			$data = array(
 				'title'=>'Laporan Anggota',
 				'script'=>'$("#anggota").addClass("active");',
-				'view'=>$this->m_anggota->getAnggota($config['per_page'],$uri,''),
 			);
+			//searching
+			if(!empty($_GET['q'])){//search something
+				$keyword = $_GET['q'];//get keyword
+				$data['view'] = $this->m_anggota->searchAnggota($config['per_page'],$uri,$keyword);
+			}else{//not searching
+				$data['view'] = $this->m_anggota->getAnggota($config['per_page'],$uri,'');
+			}
+			//end of searching
 			if($config['total_rows'] < 15) {
 				$data['page'] = 1;
 			} else {
@@ -187,21 +199,94 @@ class Dashboard extends base {
         //end of pagination
         $this->baseView('pencariansimpanan',$data);
     }
+    //buat simpanan baru
+    public function buatSimpanan(){
+    	$idanggota = $this->uri->segment(3);
+    	$data = array(
+    		'no_anggota'=>$idanggota,
+    		'tgl_simpan'=>date('Y-m-d'),
+    		'jenis_simpanan'=>0
+    		);
+    	$this->db->insert('simpanan',$data);
+    	redirect($this->agent->referrer());
+    }
 	//pinjam
 	public function pinjam(){
+		$this->load->model('m_pinjaman');
+		$config=array(
+            'per_page'=>20,//tampilan perhalamnnya
+            'uri_segment'=>5,
+            'num_link'=>5,
+            'use_page_number'=>TRUE,
+            'base_url'=>site_url('dashboard/pinjam'),
+        );
+        //pencarian atau bukan
+        if(!empty($_GET['q'])){
+        	$config['total_rows'] = $this->m_pinjaman->countGetPinjaman($_GET['q']);
+        }else{
+        	$config['total_rows'] = $this->m_pinjaman->countGetPinjaman('');
+        }
+        $this->load->library('pagination');
+        $this->pagination->initialize($config);
+        $uri = $this->uri->segment(5);
+        if(!$uri) {
+            $uri = 0;
+        }
 		$data = array(
-			'title'=>'Laporan Setor',
+			'title'=>'Laporan Pinjaman',
 			'script'=>'$("#pinjaman").addClass("active");$("#pinjam").addClass("activesub");$("#pinjamanshow").addClass("in")',
 		);
-		$this->baseView('laporansetor',$data);
+		//pencarian atau bukan
+        if(!empty($_GET['q'])){
+        	$data['view']=$this->m_pinjaman->getPinjaman($config['per_page'],$uri,'id_pinjaman','desc',$_GET['q']);
+        }else{
+        	$data['view']=$this->m_pinjaman->getPinjaman($config['per_page'],$uri,'id_pinjaman','desc','');
+        }
+		if($config['total_rows'] < 15) {
+            $data['page'] = 1;
+        } else {
+            $data['page'] = $this->pagination->create_links();
+        }
+		$this->baseView('laporanpinjam',$data);
 	}
 	//angsuran
 	public function angsuran(){
+		$this->load->model('m_pinjaman');
+		$config=array(
+            'per_page'=>20,//tampilan perhalamnnya
+            'uri_segment'=>5,
+            'num_link'=>5,
+            'use_page_number'=>TRUE,
+            'base_url'=>site_url('dashboard/angsuran'),
+        );
+        //pencarian atau bukan
+		if(!empty($_GET['q'])){
+			$config['total_rows']=$this->m_pinjaman->countGetAngsuran($_GET['q']);
+		}else{//semua data
+			$config['total_rows']=$this->m_pinjaman->countGetAngsuran('');
+		}
+        $this->load->library('pagination');
+        $this->pagination->initialize($config);
+        $uri = $this->uri->segment(5);
+        if(!$uri) {
+            $uri = 0;
+        }
 		$data = array(
 			'title'=>'Laporan Setor',
 			'script'=>'$("#pinjaman").addClass("active");$("#angsuran").addClass("activesub");$("#pinjamanshow").addClass("in")',
 		);
-		$this->baseView('laporansetor',$data);
+		//pencarian atau bukan
+		if(!empty($_GET['q'])){
+			$data['view']=$this->m_pinjaman->getAngsuran($config['per_page'],$uri,$_GET['q']);
+		}else{//semua data
+			$data['view']=$this->m_pinjaman->getAngsuran($config['per_page'],$uri,'');
+		}
+		if($config['total_rows'] < 15) {
+            $data['page'] = 1;
+        } else {
+            $data['page'] = $this->pagination->create_links();
+        }
+		$this->baseView('laporanangsuran',$data);
 	}
 //admin only
 	public function setting(){
