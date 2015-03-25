@@ -13,7 +13,8 @@ class Login extends base {
 	public function index()//login page
 	{
 		//if has logged in
-		if(!empty($this->session->userdata('karyawan'))){
+		$session = $this->session->userdata('karyawan'); 
+		if(!empty($session)){
 			redirect(site_url('dashboard'));
 		}else{ //not logged in
 			if(!empty($_POST)){//do login
