@@ -103,7 +103,8 @@ class Cek extends base {
 
     //menambah pinjam baru
     public function addPinjaman(){
-        if(!empty($this->uri->segment(3))){
+        $segment = $this->uri->segment(3); 
+        if(!empty($segment)){
             $noanggota = $this->uri->segment(3);
         }else{
             $noanggota = $_POST['inputnomoranggota'];
