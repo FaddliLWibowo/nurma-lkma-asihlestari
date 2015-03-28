@@ -288,6 +288,46 @@ class Dashboard extends base {
         }
 		$this->baseView('laporanangsuran',$data);
 	}
+	//jaminan
+	//angsuran
+	public function jaminan(){
+		$this->load->model(array('m_pinjaman','m_jaminan'));//laod auto model
+		$config=array(
+            'per_page'=>20,//tampilan perhalamnnya
+            'uri_segment'=>5,
+            'num_link'=>5,
+            'use_page_number'=>TRUE,
+            'base_url'=>site_url('dashboard/jaminan'),
+        );
+        //pencarian atau bukan
+		if(!empty($_GET['q'])){
+			$config['total_rows']=$this->m_jaminan->countSearchJaminan($_GET['q']);
+		}else{//semua data
+			$config['total_rows']=$this->m_jaminan->countGetJaminan('');
+		}
+        $this->load->library('pagination');
+        $this->pagination->initialize($config);
+        $uri = $this->uri->segment(5);
+        if(!$uri) {
+            $uri = 0;
+        }
+		$data = array(
+			'title'=>'Laporan Jaminan',
+			'script'=>'$("#pinjaman").addClass("active");$("#jaminan").addClass("activesub");$("#pinjamanshow").addClass("in")',
+		);
+		//pencarian atau bukan
+		if(!empty($_GET['q'])){
+			$data['view']=$this->m_jaminan->searchJaminan($config['per_page'],$uri,$_GET['q']);
+		}else{//semua data
+			$data['view']=$this->m_jaminan->getJaminan($config['per_page'],$uri,'');
+		}
+		if($config['total_rows'] < 15) {
+            $data['page'] = 1;
+        } else {
+            $data['page'] = $this->pagination->create_links();
+        }
+		$this->baseView('laporanjaminan',$data);
+	}
 //admin only
 	public function setting(){
 		$this->load->library('form_validation');//form validation
@@ -377,6 +417,91 @@ class Dashboard extends base {
 		}
 	}
 
+	/*
+	* ALL ABOUT CETAK PDF
+	*/
+	//cetak setoran
+	public function cetaksetoran(){
+		$bln = $_GET['bln'];
+		$thn = $_GET['thn'];
+		$data['view'] = $this->m_simpanan->getSetoranByDate($bln,$thn,'setoran');//data yang akan dimasukan ke pdf
+		$data['title'] = "Setoran Bulan $bln Tahun $thn";
+		$this->load->view('cetak/setoran',$data);
+		$html = $this->output->get_output();
+		$this->load->library('dompdf_gen');
+		$this->dompdf->load_html($html);
+		$this->dompdf->render();
+		$this->dompdf->stream("Setoran Bulan $bln Tahun $thn.pdf");//pdf file name
+	}
+	//cetak penarikan
+	public function cetakpenarikan(){
+		$bln = $_GET['bln'];
+		$thn = $_GET['thn'];
+		$data['view'] = $this->m_simpanan->getSetoranByDate($bln,$thn,'penarikan');//data yang akan dimasukan ke pdf
+		$data['title'] = "Penarikan Bulan $bln Tahun $thn";
+		$this->load->view('cetak/penarikan',$data);
+		$html = $this->output->get_output();
+		$this->load->library('dompdf_gen');
+		$this->dompdf->load_html($html);
+		$this->dompdf->render();
+		$this->dompdf->stream("Penarikan Bulan $bln Tahun $thn.pdf");//pdf file name
+	}
+	//cetak pinjaman
+	public function cetakpinjaman(){
+		$this->load->model('m_pinjaman');
+		$bln = $_GET['bln'];
+		$thn = $_GET['thn'];
+		$data['view'] = $this->m_pinjaman->getPinjamanByDate($bln,$thn);//data yang akan dimasukan ke pdf
+		$data['title'] = "Pinjaman Bulan $bln Tahun $thn";
+		$this->load->view('cetak/pinjaman',$data);
+		$html = $this->output->get_output();
+		$this->load->library('dompdf_gen');
+		$this->dompdf->load_html($html);
+		$this->dompdf->render();
+		$this->dompdf->stream("Pinjaman Bulan $bln Tahun $thn.pdf");//pdf file name
+	}
+	//cetak angsuran
+	public function cetakangsuran(){
+		$this->load->model('m_pinjaman');
+		$bln = $_GET['bln'];
+		$thn = $_GET['thn'];
+		$data['view'] = $this->m_pinjaman->getAngsuranByDate($bln,$thn);//data yang akan dimasukan ke pdf
+		$data['title'] = "Angsuran Bulan $bln Tahun $thn";
+		$this->load->view('cetak/angsuran',$data);
+		$html = $this->output->get_output();
+		$this->load->library('dompdf_gen');
+		$this->dompdf->load_html($html);
+		$this->dompdf->render();
+		$this->dompdf->stream("Angsuran Bulan $bln Tahun $thn.pdf");//pdf file name
+	}
+	//cetak jaminan
+	public function cetakjaminan(){
+		$this->load->model('m_pinjaman');
+		$bln = $_GET['bln'];
+		$thn = $_GET['thn'];
+		$data['view'] = $this->m_pinjaman->getJaminanByDate($bln,$thn);//data yang akan dimasukan ke pdf
+		$data['title'] = "Jaminan Bulan $bln Tahun $thn";
+		$this->load->view('cetak/jaminan',$data);
+		$html = $this->output->get_output();
+		$this->load->library('dompdf_gen');
+		$this->dompdf->load_html($html);
+		$this->dompdf->render();
+		$this->dompdf->stream("Jaminan Bulan $bln Tahun $thn.pdf");//pdf file name
+	}
+	//cetak anggota
+	public function cetakanggota(){
+		$this->load->model('m_anggota');
+		$limit = 100;
+		$offset = 0;
+		$data['view'] = $this->m_anggota->getAnggota($limit,$offset);//data yang akan dimasukan ke pdf
+		$data['title'] = "Laporan Anggota";
+		$this->load->view('cetak/anggota',$data);
+		$html = $this->output->get_output();
+		$this->load->library('dompdf_gen');
+		$this->dompdf->load_html($html);
+		$this->dompdf->render();
+		$this->dompdf->stream("Laporan Anggota.pdf");//pdf file name
+	}
 }
 /* End of file login.php */
 /* Location: ./application/controllers/welcome.php */

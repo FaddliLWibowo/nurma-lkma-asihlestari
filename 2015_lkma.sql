@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Mar 23, 2015 at 04:43 
+-- Generation Time: Mar 28, 2015 at 02:44 
 -- Server version: 5.6.12
 -- PHP Version: 5.5.3
 
@@ -153,8 +153,8 @@ CREATE TABLE IF NOT EXISTS `pinjaman` (
 --
 
 INSERT INTO `pinjaman` (`id_pinjaman`, `no_anggota`, `tgl_pinjam`, `besar_pinjaman`, `jatuh_tempo`, `status`) VALUES
-(8, 7, '2014-12-17 00:00:00', 2000000, '0000-00-00 00:00:00', 'pinjam'),
-(9, 10, '2014-12-18 00:00:00', 1000000, '0000-00-00 00:00:00', 'pinjam'),
+(8, 7, '2014-12-17 00:00:00', 2000000, '2015-04-01 00:00:00', 'pinjam'),
+(9, 10, '2014-12-18 00:00:00', 1000000, '2015-05-01 00:00:00', 'pinjam'),
 (11, 5, '2015-03-23 10:22:21', 20000000, '2017-03-02 00:00:00', 'pinjam'),
 (12, 23, '2015-03-23 19:32:38', 25000000, '2016-03-23 00:00:00', 'pinjam'),
 (13, 5, '2015-03-23 21:30:34', 100000, '2016-03-23 00:00:00', 'pinjam');

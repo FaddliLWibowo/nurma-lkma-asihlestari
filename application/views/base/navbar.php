@@ -114,9 +114,9 @@
             <!-- Sidebar Menu Items - These collapse to the responsive navigation menu on small screens -->
             <div class="collapse navbar-collapse navbar-ex1-collapse">
                 <ul class="nav navbar-nav side-nav">
-                    <li id="dashboard">
+                   <!--  <li id="dashboard">
                         <a href="<?php echo site_url();?>"><i class="fa fa-fw fa-dashboard"></i> Dashboard</a>
-                    </li>
+                    </li> -->
                     <li id="anggota">
                         <a href="<?php echo site_url('dashboard/laporananggota');?>"><i class="fa fa-fw fa-user"></i> Laporan Anggota</a>
                     </li>
@@ -139,6 +139,9 @@
                             </li>
                             <li id="angsuran">
                                 <a href="<?php echo site_url('dashboard/angsuran');?>">Angsuran</a>
+                            </li>
+                            <li id="jaminan">
+                                <a href="<?php echo site_url('dashboard/jaminan');?>">Jaminan</a>
                             </li>
                         </ul>
                     </li>

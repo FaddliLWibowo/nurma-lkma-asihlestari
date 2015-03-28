@@ -6,6 +6,49 @@ class M_pinjaman extends CI_Model{
         parent::__construct();
         //Do your magic here
     }
+    //tampilan pinjaman untuk PDF
+    public function getPinjamanByDate($bln,$thn){
+        //bln order
+        if($bln != 0){
+            $this->db->where('MONTH(pinjaman.tgl_pinjam) ='.$bln);
+        } 
+        //th order
+        if($thn != 0){
+           $this->db->where('YEAR(pinjaman.tgl_pinjam) ='.$thn);
+       }
+       //get result array
+       $query = $this->db->get('pinjaman');
+       if($query->num_rows()>0){return $query->result_array();}else{return array();}
+   }
+   //tampilan angsuran untuk PDF
+   public function getAngsuranByDate($bln,$thn){
+        //bln order
+    if($bln != 0){
+        $this->db->where('MONTH(angsuran.tgl_angsur) ='.$bln);
+    } 
+        //th order
+    if($thn != 0){
+       $this->db->where('YEAR(angsuran.tgl_angsur) ='.$thn);
+   }
+       //get result array
+   $this->db->join('pinjaman','angsuran.id_pinjaman=pinjaman.id_pinjaman');
+   $query = $this->db->get('angsuran');
+   if($query->num_rows()>0){return $query->result_array();}else{return array();}
+}
+   //tampilan jaminan untuk PDF
+public function getJaminanByDate($bln,$thn){
+    if($bln != 0){
+        $this->db->where('MONTH(pinjaman.tgl_pinjam) ='.$bln);
+    } 
+        //th order
+    if($thn != 0){
+       $this->db->where('YEAR(pinjaman.tgl_pinjam) ='.$thn);
+   }
+       //get result array
+   $this->db->join('pinjaman','pinjaman.id_pinjaman=jaminan.id_pinjaman');
+   $query = $this->db->get('jaminan');
+   if($query->num_rows()>0){return $query->result_array();}else{return array();}
+}
     /*
     * ALL ABOUT PINJAMAN
     */

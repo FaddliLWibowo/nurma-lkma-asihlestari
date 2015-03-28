@@ -13,14 +13,21 @@
                 <li><a href="<?php echo site_url('dashboard/laporananggota')?>">Laporan Anggota</a></li>
             </ol>
             <h1>Laporan Anggota</h1>
-            <hr/>
-            <ul class="nav nav-tabs">
-                <li class="active"><a href="#home" data-toggle="tab">Semua Anggota</a></li>
-            </ul>
-            <br/>
-            <div class="row">
-                <!--edit peserta-->
-                <?php if(!empty($_GET['view']) && $_GET['view']=='edit'):
+            <div class="form-group row">
+                <form method="GET" action="<?php echo site_url('dashboard/cetakanggota');?>">
+                   <div style="padding:0 15px" class="col-sm-2">
+                     <button class="btn btn-default" type="submit">Cetak</button>
+                 </div>
+             </form>
+         </div>
+         <hr/>
+         <ul class="nav nav-tabs">
+            <li class="active"><a href="#home" data-toggle="tab">Semua Anggota</a></li>
+        </ul>
+        <br/>
+        <div class="row">
+            <!--edit peserta-->
+            <?php if(!empty($_GET['view']) && $_GET['view']=='edit'):
                     $anggota = $this->m_anggota->detailAnggota($_GET['id']);//get detail anggota berdasarkan nomor anggota
 //                    print_r($anggota);//get full detail anggota
                     ?>

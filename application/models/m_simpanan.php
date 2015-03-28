@@ -7,6 +7,21 @@ class M_simpanan extends CI_Model{
         //Do your magic here
     }
     //ALL ABOUT setor
+    //menampilkan setoran berdasarkan tanggal
+    public function getSetoranByDate($bln,$thn,$type){
+        //bln order
+        if($bln != 0){
+            $this->db->where('MONTH(aksiSimpanan.tgl) ='.$bln);
+        } 
+        //th order
+        if($thn != 0){
+             $this->db->where('YEAR(aksiSimpanan.tgl) ='.$thn);
+        }
+        //get result array
+        $this->db->where('status',$type);
+        $query = $this->db->get('aksiSimpanan');
+        if($query->num_rows()>0){return $query->result_array();}else{return array();}
+    }
     //menampilkan semua setor
     public function getSetor($limit,$offset){
         $this->db->limit($limit,$offset);
