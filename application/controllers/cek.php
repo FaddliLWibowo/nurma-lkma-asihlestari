@@ -103,63 +103,87 @@ class Cek extends base {
 
     //menambah pinjam baru
     public function addPinjaman(){
-        $segment = $this->uri->segment(3); 
-        if(!empty($segment)){
-            $noanggota = $this->uri->segment(3);
-        }else{
-            $noanggota = $_POST['inputnomoranggota'];
+        //cek apakah pinjaman sebelumnya sudah lunas
+        //mendapatkan semua data pinjam yang telah dilakukan oleh anggota
+        $daftarpinjaman = $this->m_pinjaman->byAnggota(1,0,$_POST['inputnomoranggota']);
+        if(empty($daftarpinjaman))//belum ada pinjaman sama sekali
+        {
+            $status = TRUE;
+        }else //pernah melakukan pinjaman, cek apakah sudah lunas
+        {
+            foreach($daftarpinjaman as $dp){
+                $status = $this->m_pinjaman->cekPinjamanLunas($dp['id_pinjaman']);
+            }
         }
-        print_r($_POST);//get all data
-    //input data pinjaman
+        //apakah bisa melakukan pinjaman
+        if($status==TRUE)//bisa melakukan pinjaman
+        {
+            //insert pinjaman
+            $segment = $this->uri->segment(3); 
+            if(!empty($segment)){
+                $noanggota = $this->uri->segment(3);
+            }else{
+                $noanggota = $_POST['inputnomoranggota'];
+            }
+            print_r($_POST);//get all data
+            //input data pinjaman
+            $datapinjaman = array(
+                'no_anggota'=>$noanggota,
+                'tgl_pinjam'=>date('Y-m-d H:i:s'),
+                'besar_pinjaman'=>$_POST['inputjumlah'],
+                'jatuh_tempo'=>date('Y-m-d H:i:s',strtotime($_POST['inputjatuhtempo'])),
+                'status'=>'pinjam'
+                );
+            //insert to database
+            $this->db->insert('pinjaman',$datapinjaman);
+            //get lattest id pinjaman
+            $sql = "SELECT id_pinjaman FROM pinjaman ORDER BY id_pinjaman DESC";
+            $query = $this->db->query($sql);
+            $query = $query->row_array();
+            $lastidpinjaman = $query['id_pinjaman'];
+            //input data jaminan
+            $datajaminan = array(
+                'id_pinjaman'=>$lastidpinjaman,
+                'jenis_jaminan'=>$_POST['inputjaminan_jenis'],
+                'nama_pemilik'=>$_POST['inputjaminan_pemilik'],
+                'alamat_pemilik'=>$_POST['inputjaminan_alamat'],
+                'keterangan'=>$_POST['inputjaminan_keterangan']
+                );
+            $this->db->insert('jaminan',$datajaminan);
+            redirect($this->agent->referrer());//kembali kehalaman sebelumnya
+            // end of insert pinjaman
+        }else//tidak bisa melakukan pinjaman
+        {
+            echo ('<SCRIPT LANGUAGE="JavaScript">
+                window.alert("Tidak Bisa Tambah Pinjaman \n Pinjaman sebelumnya belum lunas");
+                window.location.href="'.$this->agent->referrer().'";
+            </SCRIPT>');
+        }        
+    }
+    //detail pinjaman
+    public function detailpinjaman(){
+        $idpinjaman = $this->uri->segment(3);
+        //get detail pinjaman
+        $pinjaman = $this->m_pinjaman->detailPinjaman($idpinjaman);
+        $data = array(
+            'title'=>'Detail Pinjaman',
+            'anggota'=>$this->m_anggota->detailAnggota($pinjaman['no_anggota']),
+            'pinjaman'=>$pinjaman,
+            'terbayar'=>$this->m_pinjaman->totalAngsuran($idpinjaman),
+            'angsuran'=>$this->m_pinjaman->listAngsuran($idpinjaman),
+            'script'=>'$("#anggota").addClass("active");$("#cekpinjaman").addClass("active")',
+            );
+        $this->baseView('cek/detailpinjaman',$data);
+    }
+//edit pinjaman
+    public function editPinjaman(){
+        $idpinjaman = $this->uri->segment(3);
+        $this->db->where('id_pinjaman',$idpinjaman);
         $datapinjaman = array(
-            'no_anggota'=>$noanggota,
-            'tgl_pinjam'=>date('Y-m-d H:i:s'),
             'besar_pinjaman'=>$_POST['inputjumlah'],
             'jatuh_tempo'=>date('Y-m-d H:i:s',strtotime($_POST['inputjatuhtempo'])),
-            'status'=>'pinjam'
             );
-    //insert to database
-        $this->db->insert('pinjaman',$datapinjaman);
-    //get lattest id pinjaman
-        $sql = "SELECT id_pinjaman FROM pinjaman ORDEr BY id_pinjaman DESC";
-        $query = $this->db->query($sql);
-        $query = $query->row_array();
-        $lastidpinjaman = $query['id_pinjaman'];
-    //input data jaminan
-        $datajaminan = array(
-            'id_pinjaman'=>$lastidpinjaman,
-            'jenis_jaminan'=>$_POST['inputjaminan_jenis'],
-            'nama_pemilik'=>$_POST['inputjaminan_pemilik'],
-            'alamat_pemilik'=>$_POST['inputjaminan_alamat'],
-            'keterangan'=>$_POST['inputjaminan_keterangan']
-            );
-        $this->db->insert('jaminan',$datajaminan);
-    redirect($this->agent->referrer());//kembali kehalaman sebelumnya
-}
-    //detail pinjaman
-public function detailpinjaman(){
-    $idpinjaman = $this->uri->segment(3);
-        //get detail pinjaman
-    $pinjaman = $this->m_pinjaman->detailPinjaman($idpinjaman);
-    $data = array(
-        'title'=>'Detail Pinjaman',
-        'anggota'=>$this->m_anggota->detailAnggota($pinjaman['no_anggota']),
-        'pinjaman'=>$pinjaman,
-        'terbayar'=>$this->m_pinjaman->totalAngsuran($idpinjaman),
-        'angsuran'=>$this->m_pinjaman->listAngsuran($idpinjaman),
-        'script'=>'$("#anggota").addClass("active");$("#cekpinjaman").addClass("active")',
-        );
-    $this->baseView('cek/detailpinjaman',$data);
-}
-//edit pinjaman
-public function editPinjaman(){
-    $idpinjaman = $this->uri->segment(3);
-    $this->db->where('id_pinjaman',$idpinjaman);
-    $datapinjaman = array(
-        'besar_pinjaman'=>$_POST['inputjumlah'],
-        'jatuh_tempo'=>date('Y-m-d H:i:s',strtotime($_POST['inputjatuhtempo'])),
-        );
-    $this->db->update('pinjaman',$datapinjaman);
+        $this->db->update('pinjaman',$datapinjaman);
     redirect($this->agent->referrer());//kembali kehalaman sebelumnya
 }
 //hapus pinjaman -- otomatis hapus jaminan

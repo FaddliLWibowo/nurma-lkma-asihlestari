@@ -69,6 +69,7 @@ public function getJaminanByDate($bln,$thn){
     public function byAnggota($limit,$offset,$noanggota){
         $this->db->limit($limit,$offset);
         $this->db->where('no_anggota',$noanggota);
+        $this->db->order_by('id_pinjaman','DESC');//order berdasarkan id pinjaman secara descending
         $query = $this->db->get('pinjaman');
         if($query->num_rows()>0){
             return $query->result_array();//menampilkan hasil
@@ -142,6 +143,34 @@ public function getJaminanByDate($bln,$thn){
             return $query->row_array();
         }else{
             return array();
+        }
+    }
+    //mendapatkan total angsuran yang terbayar
+    public function getTotalAngsuran($idpinjaman){
+       $sql = "SELECT total_angsur FROM angsuran WHERE id_pinjaman = $idpinjaman";
+       $query = $this->db->query($sql);
+     $query = $query->result_array();//menampilkan hasil select menjadi array banyak
+     $total = 0;
+     foreach($query as $q):
+       $total = $total + $q['total_angsur'];
+   endforeach;
+       return $total;//mendapatkan total angsuran
+   }
+    //cek apakah pinjaman sudah lunas
+   public function cekPinjamanLunas($idpinjaman){
+    $sql = "SELECT besar_pinjaman FROM pinjaman WHERE id_pinjaman = $idpinjaman";
+    $query = $this->db->query($sql);
+        $query = $query->row_array();//hanya menampilkan array 1 dimensi
+        $totalpinjaman = $query['besar_pinjaman'];
+        $totalangsuran = $this->m_pinjaman->getTotalAngsuran($idpinjaman);
+        //total terbayar
+        $totalterbayar = $totalpinjaman - $totalangsuran;
+        if($totalterbayar <= 0)
+        {
+            return true;//pinjaman sudah lunas
+        } else
+        {
+            return false;//pinjaman belum lunas
         }
     }
 }
