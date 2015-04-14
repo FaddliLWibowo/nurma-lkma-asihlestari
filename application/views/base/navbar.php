@@ -37,6 +37,9 @@
                    <!--  <li id="dashboard">
                         <a href="<?php echo site_url();?>"><i class="fa fa-fw fa-dashboard"></i> Dashboard</a>
                     </li> -->
+                    <li id="organisasi">
+                        <a href="<?php echo site_url('dashboard/susunan');?>"><i class="fa fa-fw fa-user"></i> Susunan Organisasi</a>
+                    </li>
                     <li id="anggota">
                         <a href="<?php echo site_url('dashboard/laporananggota');?>"><i class="fa fa-fw fa-user"></i> Laporan Anggota</a>
                     </li>

@@ -1,3 +1,13 @@
+<script type="text/javascript">
+    function cekTotalAngsur()
+    {
+        var pokok = parseInt($('#inputangsuranpokok').val());
+        var denda = parseInt($('#inputdenda').val());
+        var totaldenda = parseInt(pokok + (pokok*denda));
+        var totalangsur = parseInt(totaldenda + (pokok*0,0125));
+        $('#totalangsur').val(totalangsur);
+    }
+</script>
 <!-- JNT0000OOU*** -->
 <div id="wrapper" xmlns="http://www.w3.org/1999/html">
     <!-- top navbar -->
@@ -62,13 +72,21 @@
                     $n=1;
                     if(!empty($angsuranterakhir)){//belum pernah melakukan pembayaran angsuran
                         // echo 'ada';
-                       $nextN = date('d-m-Y',strtotime('+1 month',strtotime($angsuranterakhir['tgl_angsur'])));
+                     $nextN = date('d-m-Y',strtotime('+1 month',strtotime($angsuranterakhir['tgl_angsur'])));
                     }else{//sudah membayar angsuran
                         // echo 'kosong';
                         $nextN = date('d-m-Y',strtotime('+1 month',strtotime($pinjaman['tgl_pinjam'])));
                     }
                     $jatuhtempobulanini = $nextN;
                     echo $jatuhtempobulanini;
+                    ?>
+                    <?php
+                    $today = date('Y-m-d');
+                    if($today<=$jatuhtempobulanini){
+                        $denda =0;
+                    }else{
+                        $denda = 0.0115;
+                    }
                     ?>
                 </td>
             </tr>
@@ -137,29 +155,21 @@
                     <h4 class="modal-title">Tambah Angsuran</h4>
                 </div>
                 <div class="modal-body">
-                     <?php
-                    //denda atau tidak
-                    $today = date('Y-m-d');
-                    if($today<=$jatuhtempobulanini){
-                        $denda =0;
-                    }else{
-                        $denda = 0.0115;
-                    }
-                    ?>
                     <!-- start form -->
                     <label>Id Pinjaman</label>
-                    <input class="form-control" type="text" name="inputidpinjaman" value="<?php echo $this->uri->segment(3);?>"><br/>
+                    <input id="inputidpinjaman" class="form-control" type="text" name="inputidpinjaman" value="<?php echo $this->uri->segment(3);?>"><br/>
                     <label>Angsuran Pokok (Rp)<br/><small>masukan tanpa tanda titik</small></label>
-                    <input class="form-control" type="text" name="inputangsuranpokok" value="<?php echo ceil($angsuranpokok);?>"><br/>
-                    <label>Denda (%)<br/><smal><small>masukan angka tanpa tanda persen</small></label>
-                    <input class="form-control" type="text" name="inputdenda" value="<?php echo $denda?>"><br/>
-                    <label>Total Angsur (Rp)<br/><small>masukan tanpa tanda titik</small></label>
-                    <input class="form-control" type="text" name="inputtotalangsur" value="<?php echo ceil($angsuranpokok + ($angsuranpokok*$denda));?>"><br/>
+                    <input id="inputangsuranpokok" class="form-control" type="text" name="inputangsuranpokok" value="<?php echo ceil($angsuranpokok);?>"><br/>
+                    <label>Denda (%)<br/><smal><small>denda otomatis berubah ketika lewat 1 bulan dari jatuh tempo<br/>masukan angka tanpa tanda persen</small></label>
+                    <input id="inputdenda" class="form-control" type="text" name="inputdenda" value="<?php echo $denda?>"><br/>
+                    <label>Total Angsur (Rp)<br/><small>bunga perbulan 15%<br/>klik tombol cek untuk menghitung</small></label>
+                    <input id="totalangsur" class="form-control" type="text" name="inputtotalangsur" placeholder="Klik tombol cek untuk hitung total angsuran" required><br/>
                     <!-- end form -->
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Save changes</button>
+                    <button onclick="cekTotalAngsur()" style="float:left" type="button" class="btn btn-primary">Cek</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Tutup</button>
+                    <button type="submit" class="btn btn-primary">Tambah Angsuran</button>
                 </div>
             </form>
         </div><!-- /.modal-content -->
@@ -187,8 +197,8 @@
                     <!-- end form -->
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Save changes</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Tutup</button>
+                    <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
                 </div>
             </form>
         </div><!-- /.modal-content -->
@@ -222,8 +232,8 @@
                     <!-- end form -->
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Save changes</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Tutup</button>
+                    <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
                 </div>
             </form>
         </div><!-- /.modal-content -->

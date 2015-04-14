@@ -21,6 +21,16 @@ class Dashboard extends base {
         );
 		$this->baseView('dashboard',$data);
 	}
+	//susunan anggota
+	public function susunan()
+	{
+		$data = array 
+		(
+			'title'=>'Susunan Anggota',
+            'script'=>'$("#organisasi").addClass("active");',
+			);
+		$this->baseView('susunan',$data);
+	}
 	//laporan anggota
 	public function laporananggota(){
 		if(!empty($_POST) || !empty($_GET['act'])){//do action
