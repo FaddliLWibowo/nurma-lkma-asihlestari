@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.0.4.1
+-- version 4.2.11
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Mar 28, 2015 at 02:44 
--- Server version: 5.6.12
--- PHP Version: 5.5.3
+-- Generation Time: Apr 14, 2015 at 01:03 
+-- Server version: 5.6.21
+-- PHP Version: 5.6.3
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -19,8 +19,6 @@ SET time_zone = "+00:00";
 --
 -- Database: `2015_lkma`
 --
-CREATE DATABASE IF NOT EXISTS `2015_lkma` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
-USE `2015_lkma`;
 
 -- --------------------------------------------------------
 
@@ -29,14 +27,12 @@ USE `2015_lkma`;
 --
 
 CREATE TABLE IF NOT EXISTS `aksiSimpanan` (
-  `id_aksi` int(11) NOT NULL AUTO_INCREMENT,
+`id_aksi` int(11) NOT NULL,
   `id_simpanan` int(11) NOT NULL,
   `tgl` datetime NOT NULL,
   `jumlah` bigint(20) NOT NULL,
-  `status` enum('penarikan','setoran') NOT NULL,
-  PRIMARY KEY (`id_aksi`),
-  KEY `id_simpanan` (`id_simpanan`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=6 ;
+  `status` enum('penarikan','setoran') NOT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `aksiSimpanan`
@@ -55,17 +51,15 @@ INSERT INTO `aksiSimpanan` (`id_aksi`, `id_simpanan`, `tgl`, `jumlah`, `status`)
 --
 
 CREATE TABLE IF NOT EXISTS `anggota` (
-  `no_anggota` int(12) NOT NULL AUTO_INCREMENT,
+`no_anggota` int(12) NOT NULL,
   `no_identitas` varchar(30) NOT NULL,
   `nama` varchar(50) NOT NULL,
   `alamat` varchar(100) NOT NULL,
   `jenis_kelamin` varchar(10) NOT NULL,
   `tempat_lahir` varchar(20) NOT NULL,
   `tanggal_lahir` date NOT NULL,
-  `telepon` varchar(12) NOT NULL,
-  PRIMARY KEY (`no_anggota`),
-  UNIQUE KEY `no_identitas` (`no_identitas`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=24 ;
+  `telepon` varchar(12) NOT NULL
+) ENGINE=MyISAM AUTO_INCREMENT=25 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `anggota`
@@ -77,7 +71,8 @@ INSERT INTO `anggota` (`no_anggota`, `no_identitas`, `nama`, `alamat`, `jenis_ke
 (6, '12345678', 'dpkaa', 'jamus', 'wanita', 'westprog', '2011-11-21', '1234'),
 (7, '8909809', 'nurma', 'ngento', 'pria', 'kp', '2011-08-06', '9890'),
 (8, '98098098', 'rahmanto', 'ngento', 'pria', 'kp', '1998-12-12', '876765909'),
-(10, '12345690', 'nurmayanti', 'kp', 'pria', 'kp', '2015-03-19', '7689876');
+(10, '12345690', 'nurmayanti', 'kp', 'pria', 'kp', '2015-03-19', '7689876'),
+(24, '11115284', 'Yusuf Akhsan Hidayat', 'Jalan lele 1 Sleman, DIY', 'pria', 'Ponorogo', '2015-04-26', '085645777298');
 
 -- --------------------------------------------------------
 
@@ -86,15 +81,13 @@ INSERT INTO `anggota` (`no_anggota`, `no_identitas`, `nama`, `alamat`, `jenis_ke
 --
 
 CREATE TABLE IF NOT EXISTS `angsuran` (
-  `id_angsuran` int(15) NOT NULL AUTO_INCREMENT,
+`id_angsuran` int(15) NOT NULL,
   `id_pinjaman` int(15) NOT NULL,
   `tgl_angsur` date NOT NULL,
   `angsuran_pokok` int(15) NOT NULL,
   `denda` int(15) NOT NULL,
-  `total_angsur` int(15) NOT NULL,
-  PRIMARY KEY (`id_angsuran`),
-  KEY `id_pinjaman` (`id_pinjaman`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
+  `total_angsur` int(15) NOT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `angsuran`
@@ -112,15 +105,13 @@ INSERT INTO `angsuran` (`id_angsuran`, `id_pinjaman`, `tgl_angsur`, `angsuran_po
 --
 
 CREATE TABLE IF NOT EXISTS `jaminan` (
-  `id_jaminan` int(15) NOT NULL AUTO_INCREMENT,
+`id_jaminan` int(15) NOT NULL,
   `id_pinjaman` int(15) NOT NULL,
   `jenis_jaminan` varchar(15) NOT NULL,
   `nama_pemilik` varchar(50) NOT NULL,
   `alamat_pemilik` varchar(50) NOT NULL,
-  `keterangan` varchar(30) NOT NULL,
-  PRIMARY KEY (`id_jaminan`),
-  KEY `id_pinjaman` (`id_pinjaman`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
+  `keterangan` varchar(30) NOT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `jaminan`
@@ -138,15 +129,13 @@ INSERT INTO `jaminan` (`id_jaminan`, `id_pinjaman`, `jenis_jaminan`, `nama_pemil
 --
 
 CREATE TABLE IF NOT EXISTS `pinjaman` (
-  `id_pinjaman` int(15) NOT NULL AUTO_INCREMENT,
+`id_pinjaman` int(15) NOT NULL,
   `no_anggota` int(12) NOT NULL,
   `tgl_pinjam` datetime NOT NULL,
   `besar_pinjaman` int(15) NOT NULL,
   `jatuh_tempo` datetime NOT NULL,
-  `status` enum('pinjam','lunas','telat') NOT NULL,
-  PRIMARY KEY (`id_pinjaman`),
-  KEY `no_anggota` (`no_anggota`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=14 ;
+  `status` enum('pinjam','lunas','telat') NOT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `pinjaman`
@@ -166,13 +155,11 @@ INSERT INTO `pinjaman` (`id_pinjaman`, `no_anggota`, `tgl_pinjam`, `besar_pinjam
 --
 
 CREATE TABLE IF NOT EXISTS `simpanan` (
-  `id_simpanan` int(11) NOT NULL AUTO_INCREMENT,
+`id_simpanan` int(11) NOT NULL,
   `no_anggota` int(12) NOT NULL,
   `tgl_simpan` date NOT NULL,
-  `jenis_simpanan` varchar(20) NOT NULL,
-  PRIMARY KEY (`id_simpanan`),
-  KEY `no_anggota` (`no_anggota`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=12 ;
+  `jenis_simpanan` varchar(20) NOT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `simpanan`
@@ -193,7 +180,7 @@ INSERT INTO `simpanan` (`id_simpanan`, `no_anggota`, `tgl_simpan`, `jenis_simpan
 --
 
 CREATE TABLE IF NOT EXISTS `user` (
-  `user_id` int(10) NOT NULL AUTO_INCREMENT,
+`user_id` int(10) NOT NULL,
   `nama_pegawai` varchar(50) NOT NULL,
   `alamat_pegawai` varchar(100) NOT NULL,
   `jk_pegawai` text NOT NULL,
@@ -204,9 +191,8 @@ CREATE TABLE IF NOT EXISTS `user` (
   `telp_pegawai` int(12) NOT NULL,
   `username` varchar(20) NOT NULL,
   `password` text NOT NULL,
-  `level` varchar(10) NOT NULL,
-  PRIMARY KEY (`user_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
+  `level` varchar(10) NOT NULL
+) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `user`
@@ -217,6 +203,91 @@ INSERT INTO `user` (`user_id`, `nama_pegawai`, `alamat_pegawai`, `jk_pegawai`, `
 (2, 'Yusuf A.H', 'dimana-mana', '', '', '0000-00-00', 'Strata 1', '', 0, 'yussan', 'ac43724f16e9241d990427ab7c8f4228', 'admin');
 
 --
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `aksiSimpanan`
+--
+ALTER TABLE `aksiSimpanan`
+ ADD PRIMARY KEY (`id_aksi`), ADD KEY `id_simpanan` (`id_simpanan`);
+
+--
+-- Indexes for table `anggota`
+--
+ALTER TABLE `anggota`
+ ADD PRIMARY KEY (`no_anggota`), ADD UNIQUE KEY `no_identitas` (`no_identitas`);
+
+--
+-- Indexes for table `angsuran`
+--
+ALTER TABLE `angsuran`
+ ADD PRIMARY KEY (`id_angsuran`), ADD KEY `id_pinjaman` (`id_pinjaman`);
+
+--
+-- Indexes for table `jaminan`
+--
+ALTER TABLE `jaminan`
+ ADD PRIMARY KEY (`id_jaminan`), ADD KEY `id_pinjaman` (`id_pinjaman`);
+
+--
+-- Indexes for table `pinjaman`
+--
+ALTER TABLE `pinjaman`
+ ADD PRIMARY KEY (`id_pinjaman`), ADD KEY `no_anggota` (`no_anggota`);
+
+--
+-- Indexes for table `simpanan`
+--
+ALTER TABLE `simpanan`
+ ADD PRIMARY KEY (`id_simpanan`), ADD KEY `no_anggota` (`no_anggota`);
+
+--
+-- Indexes for table `user`
+--
+ALTER TABLE `user`
+ ADD PRIMARY KEY (`user_id`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `aksiSimpanan`
+--
+ALTER TABLE `aksiSimpanan`
+MODIFY `id_aksi` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=6;
+--
+-- AUTO_INCREMENT for table `anggota`
+--
+ALTER TABLE `anggota`
+MODIFY `no_anggota` int(12) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=25;
+--
+-- AUTO_INCREMENT for table `angsuran`
+--
+ALTER TABLE `angsuran`
+MODIFY `id_angsuran` int(15) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=4;
+--
+-- AUTO_INCREMENT for table `jaminan`
+--
+ALTER TABLE `jaminan`
+MODIFY `id_jaminan` int(15) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=5;
+--
+-- AUTO_INCREMENT for table `pinjaman`
+--
+ALTER TABLE `pinjaman`
+MODIFY `id_pinjaman` int(15) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=14;
+--
+-- AUTO_INCREMENT for table `simpanan`
+--
+ALTER TABLE `simpanan`
+MODIFY `id_simpanan` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=12;
+--
+-- AUTO_INCREMENT for table `user`
+--
+ALTER TABLE `user`
+MODIFY `user_id` int(10) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=4;
+--
 -- Constraints for dumped tables
 --
 
@@ -224,19 +295,19 @@ INSERT INTO `user` (`user_id`, `nama_pegawai`, `alamat_pegawai`, `jk_pegawai`, `
 -- Constraints for table `aksiSimpanan`
 --
 ALTER TABLE `aksiSimpanan`
-  ADD CONSTRAINT `aksiSimpanan_ibfk_1` FOREIGN KEY (`id_simpanan`) REFERENCES `simpanan` (`id_simpanan`) ON DELETE CASCADE ON UPDATE CASCADE;
+ADD CONSTRAINT `aksiSimpanan_ibfk_1` FOREIGN KEY (`id_simpanan`) REFERENCES `simpanan` (`id_simpanan`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `angsuran`
 --
 ALTER TABLE `angsuran`
-  ADD CONSTRAINT `angsuran_ibfk_1` FOREIGN KEY (`id_pinjaman`) REFERENCES `pinjaman` (`id_pinjaman`) ON DELETE CASCADE ON UPDATE CASCADE;
+ADD CONSTRAINT `angsuran_ibfk_1` FOREIGN KEY (`id_pinjaman`) REFERENCES `pinjaman` (`id_pinjaman`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `jaminan`
 --
 ALTER TABLE `jaminan`
-  ADD CONSTRAINT `jaminan_ibfk_1` FOREIGN KEY (`id_pinjaman`) REFERENCES `pinjaman` (`id_pinjaman`) ON DELETE CASCADE ON UPDATE CASCADE;
+ADD CONSTRAINT `jaminan_ibfk_1` FOREIGN KEY (`id_pinjaman`) REFERENCES `pinjaman` (`id_pinjaman`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
