@@ -37,6 +37,49 @@
             <br/>
             <h4>Detail Pinjaman <a data-toggle="modal" href="#editpinjaman">edit</a></h4>
             <table class="table table-striped">
+                <?php
+                //menghitung total bulan antara tanggal pinjaman dan jatuh tempo
+                $today = date_create(date('Y-m-d',strtotime($pinjaman['tgl_pinjam'])));
+                $last = date_create(date('Y-m-d',strtotime($pinjaman['jatuh_tempo'])));
+                $diff=date_diff($today,$last);
+                $log = $diff->days;
+                $angsur = $log/30;
+                $angsurarray = explode('.', $angsur);
+                $angsur = $angsurarray[0];//total angsuran
+                //menghitung angsuran pokok
+                $angsuranpokok = $pinjaman['besar_pinjaman']/$angsur;
+                ?>
+                <?php 
+                    //apakah sudah melakukan pembayaran angsuran
+                $angsuranterakhir = $this->m_pinjaman->tanggalTerakhirAngsur($pinjaman['id_pinjaman']);
+                $n=1;
+                if(!empty($angsuranterakhir)){//belum pernah melakukan pembayaran angsuran
+                    // echo 'ada';
+                   $nextN = date('d-m-Y',strtotime('+1 month',strtotime($angsuranterakhir['tgl_angsur'])));
+                }else{//sudah membayar angsuran
+                    // echo 'kosong';
+                    $nextN = date('d-m-Y',strtotime('+1 month',strtotime($pinjaman['tgl_pinjam'])));
+                }
+                $jatuhtempobulanini = $nextN;
+                ?>
+                <?php
+                $today = date('Y-m-d');
+                if($today<=$jatuhtempobulanini){
+                    $denda =0;
+                }else{
+                    $denda = 0.0115;
+                }
+                //apakah diblack list : blacklist melebihi 4 bulan tidak bayar angsuran
+                $today = date_create(date('Y-m-d',strtotime($pinjaman['tgl_pinjam'])));
+                $tempobulanini = date_create(date('Y-m-d',strtotime($jatuhtempobulanini)));
+                $lewatdiff = date_diff($today,$tempobulanini);
+                $lewat = $lewatdiff->days;
+                ?>
+                <?php if($lewat > 120):?>
+                    <tr>
+                        <td>Status Pelanggan</td><td><span style="color:red">BLACKLIST</span></td>
+                    </tr>
+                <?php endif;?>
                 <tr>
                     <td>Id Pinjaman</td><td><?php echo $pinjaman['id_pinjaman']?></td>
                 </tr>
@@ -52,42 +95,8 @@
                 <tr>
                     <td>Total Terbayar</td><td>Rp<?php echo number_format($terbayar)?>,-</td>
                 </tr>
-                <?php
-                //menghitung total bulan antara tanggal pinjaman dan jatuh tempo
-                $today = date_create(date('Y-m-d',strtotime($pinjaman['tgl_pinjam'])));
-                $last = date_create(date('Y-m-d',strtotime($pinjaman['jatuh_tempo'])));
-                $diff=date_diff($today,$last);
-                $log = $diff->days;
-                $angsur = $log/30;
-                $angsurarray = explode('.', $angsur);
-                $angsur = $angsurarray[0];//total angsuran
-                //menghitung angsuran pokok
-                $angsuranpokok = $pinjaman['besar_pinjaman']/$angsur;
-                ?>
                 <tr>
-                    <td>Jatuh Tempo Bulan Ini</td><td>
-                    <?php 
-                    //apakah sudah melakukan pembayaran angsuran
-                    $angsuranterakhir = $this->m_pinjaman->tanggalTerakhirAngsur($pinjaman['id_pinjaman']);
-                    $n=1;
-                    if(!empty($angsuranterakhir)){//belum pernah melakukan pembayaran angsuran
-                        // echo 'ada';
-                     $nextN = date('d-m-Y',strtotime('+1 month',strtotime($angsuranterakhir['tgl_angsur'])));
-                    }else{//sudah membayar angsuran
-                        // echo 'kosong';
-                        $nextN = date('d-m-Y',strtotime('+1 month',strtotime($pinjaman['tgl_pinjam'])));
-                    }
-                    $jatuhtempobulanini = $nextN;
-                    echo $jatuhtempobulanini;
-                    ?>
-                    <?php
-                    $today = date('Y-m-d');
-                    if($today<=$jatuhtempobulanini){
-                        $denda =0;
-                    }else{
-                        $denda = 0.0115;
-                    }
-                    ?>
+                    <td>Jatuh Tempo Bulan Ini</td><td><?php echo $jatuhtempobulanini;?></td>
                 </td>
             </tr>
             <tr>
