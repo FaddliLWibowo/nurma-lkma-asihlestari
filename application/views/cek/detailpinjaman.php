@@ -4,7 +4,7 @@
         var pokok = parseInt($('#inputangsuranpokok').val());
         var denda = parseInt($('#inputdenda').val());
         var totaldenda = parseInt(pokok + (pokok*denda));
-        var totalangsur = parseInt(totaldenda + (pokok*0,0125));
+        var totalangsur = parseInt(totaldenda + (pokok*0,012));
         $('#totalangsur').val(totalangsur);
     }
 </script>
@@ -49,7 +49,7 @@
                 //menghitung angsuran pokok
                 $angsuranpokok = $pinjaman['besar_pinjaman']/$angsur;
                 ?>
-                <?php 
+                <?php
                     //apakah sudah melakukan pembayaran angsuran
                 $angsuranterakhir = $this->m_pinjaman->tanggalTerakhirAngsur($pinjaman['id_pinjaman']);
                 $n=1;
@@ -171,7 +171,7 @@
                     <input id="inputangsuranpokok" class="form-control" type="text" name="inputangsuranpokok" value="<?php echo ceil($angsuranpokok);?>"><br/>
                     <label>Denda (%)<br/><smal><small>denda otomatis berubah ketika lewat 1 bulan dari jatuh tempo<br/>masukan angka tanpa tanda persen</small></label>
                     <input id="inputdenda" class="form-control" type="text" name="inputdenda" value="<?php echo $denda?>"><br/>
-                    <label>Total Angsur (Rp)<br/><small>bunga perbulan 15%<br/>klik tombol cek untuk menghitung</small></label>
+                    <label>Total Angsur (Rp)<br/><small>bunga perbulan 1,2%<br/>klik tombol cek untuk menghitung</small></label>
                     <input id="totalangsur" class="form-control" type="text" name="inputtotalangsur" placeholder="Klik tombol cek untuk hitung total angsuran" required><br/>
                     <!-- end form -->
                 </div>
@@ -202,7 +202,7 @@
                     <input class="form-control" name="inputjumlah" type="number" value="<?php echo $pinjaman['besar_pinjaman']?>" required>
                     <br/>
                     <label>Jatuh Tempo<br/> <small>default 1 tahun dari tanggal pinjam</small></label>
-                    <input class="form-control" id="adddate" name="inputjatuhtempo" type="text"  value="<?php echo $pinjaman['jatuh_tempo']?>" required>   
+                    <input class="form-control" id="adddate" name="inputjatuhtempo" type="text"  value="<?php echo $pinjaman['jatuh_tempo']?>" required>
                     <!-- end form -->
                 </div>
                 <div class="modal-footer">

@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Apr 14, 2015 at 01:03 
+-- Generation Time: Apr 29, 2015 at 12:34 
 -- Server version: 5.6.21
 -- PHP Version: 5.6.3
 
@@ -111,7 +111,7 @@ CREATE TABLE IF NOT EXISTS `jaminan` (
   `nama_pemilik` varchar(50) NOT NULL,
   `alamat_pemilik` varchar(50) NOT NULL,
   `keterangan` varchar(30) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `jaminan`
@@ -120,7 +120,8 @@ CREATE TABLE IF NOT EXISTS `jaminan` (
 INSERT INTO `jaminan` (`id_jaminan`, `id_pinjaman`, `jenis_jaminan`, `nama_pemilik`, `alamat_pemilik`, `keterangan`) VALUES
 (2, 11, 'Jenis Jaminans', 'Nama Pemilik ', 'Alamat', 'Keterangan'),
 (3, 12, 'Kampus', 'Prof H M Suyanto', 'Yogyakarta', 'Kampus STMIK Amikom Yogyakarta'),
-(4, 13, '-', '-', '-', '-');
+(4, 13, '-', '-', '-', '-'),
+(5, 14, 'Motor', 'Yusuf Akhsan Hidayat', 'Jalan Lele, Maguwoharjo, Sleman', 'Motor');
 
 -- --------------------------------------------------------
 
@@ -135,7 +136,7 @@ CREATE TABLE IF NOT EXISTS `pinjaman` (
   `besar_pinjaman` int(15) NOT NULL,
   `jatuh_tempo` datetime NOT NULL,
   `status` enum('pinjam','lunas','telat') NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `pinjaman`
@@ -146,7 +147,8 @@ INSERT INTO `pinjaman` (`id_pinjaman`, `no_anggota`, `tgl_pinjam`, `besar_pinjam
 (9, 10, '2014-12-18 00:00:00', 1000000, '2015-05-01 00:00:00', 'pinjam'),
 (11, 5, '2015-03-23 10:22:21', 20000000, '2017-03-02 00:00:00', 'pinjam'),
 (12, 23, '2015-03-23 19:32:38', 25000000, '2016-03-23 00:00:00', 'pinjam'),
-(13, 5, '2015-03-23 21:30:34', 100000, '2016-03-23 00:00:00', 'pinjam');
+(13, 5, '2015-03-23 21:30:34', 100000, '2016-03-23 00:00:00', 'pinjam'),
+(14, 24, '2015-04-14 18:05:20', 20000000, '2016-04-14 00:00:00', 'pinjam');
 
 -- --------------------------------------------------------
 
@@ -271,12 +273,12 @@ MODIFY `id_angsuran` int(15) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=4;
 -- AUTO_INCREMENT for table `jaminan`
 --
 ALTER TABLE `jaminan`
-MODIFY `id_jaminan` int(15) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=5;
+MODIFY `id_jaminan` int(15) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=6;
 --
 -- AUTO_INCREMENT for table `pinjaman`
 --
 ALTER TABLE `pinjaman`
-MODIFY `id_pinjaman` int(15) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=14;
+MODIFY `id_pinjaman` int(15) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=15;
 --
 -- AUTO_INCREMENT for table `simpanan`
 --
